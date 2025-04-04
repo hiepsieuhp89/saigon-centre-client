@@ -14,21 +14,24 @@ import { styled } from "@mui/material/styles"
 const StyledPagination = styled(Pagination)(({ theme }) => ({
   "& .MuiPaginationItem-root": {
     color: "#ffffff",
+    borderRadius: '50%',
     [theme.breakpoints.down('sm')]: {
       minWidth: '32px',
       height: '32px',
       width: '32px',
       fontSize: '0.8rem',
-      borderRadius: '50%',
     },
   },
   "& .MuiPaginationItem-page.Mui-selected": {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
     fontWeight: "bold",
-    borderRadius: '50%',
     height: '32px',
     width: '32px',
+    [theme.breakpoints.up('sm')]: {
+      height: '40px',
+      width: '40px',
+    },
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
     },
@@ -66,7 +69,19 @@ export default function HomePage() {
   const theme = useTheme()
   const { data: products, isLoading } = useGetProducts(currentPage, pageSize)
   if (isLoading) {
-    return <Spin size="small" />
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "300px",
+          width: "100%",
+        }}
+      >
+        <Spin size="large" />
+      </Box>
+    )
   }
 
   const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
