@@ -1,0 +1,43 @@
+/* Vùng bao hiển thị tối đa 4 dòng */
+.marqueeContainer {
+  width: 360px;
+  overflow: hidden;
+  height: 160px; /* Điều chỉnh chiều cao đủ để hiển thị 4 dòng */
+  position: relative;
+}
+@media (max-width: 768px) {
+  .marqueeContainer {
+    width: 95vw;
+    padding: 0px 4px;
+  }
+}
+/* Khối nội dung sẽ được animation chạy dọc */
+.marqueeContent {
+  position: absolute;
+  width: 100%;
+  animation: marqueeScroll 15s linear infinite;
+  /* 10s = thời gian chạy hết một vòng; 
+               có thể tăng/giảm để thay đổi tốc độ cuộn */
+}
+
+/* Định dạng từng dòng flex như trong ví dụ */
+.slideDaily .flex.daily {
+  padding: 5px;
+  background: #e0dede;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 05px;
+}
+
+/* Animation chạy từ trên xuống (dịch dần xuống) */
+@keyframes marqueeScroll {
+  0% {
+    top: 0;
+  }
+  100% {
+    /* Bạn cần điều chỉnh con số âm bên dưới 
+                   sao cho vừa đúng với tổng chiều cao tất cả các dòng.
+                   Ở ví dụ này tạm tính -700px để cuộn hết khối. */
+    top: -700px;
+  }
+}
