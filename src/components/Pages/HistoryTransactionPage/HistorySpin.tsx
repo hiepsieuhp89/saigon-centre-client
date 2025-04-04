@@ -153,14 +153,14 @@ export default function HistorySpin() {
                 <div className="flex items-center gap-3 w-full sm:w-auto">
                   <img
                     src={item.product?.imageUrl || FALLBACK_IMAGE_URL}
-                    alt="SaigonCentre Kors"
+                    alt="SaigonCentre"
                     className="w-12 h-12 rounded-full"
                     onError={(e) => {
                       (e.target as HTMLImageElement).src = FALLBACK_IMAGE_URL;
                     }}
                   />
                   <div>
-                    <h3 className="font-medium text-white">SaigonCentre Kors</h3>
+                    <h3 className="font-medium text-white">SaigonCentre</h3>
                     <p className="text-sm text-gray-300">
                       {item.product?.name}
                     </p>

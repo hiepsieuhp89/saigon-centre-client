@@ -10,7 +10,8 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "SaigonCentre Kors",
+  title: "Saigon Centre",
+  description: "Discover Saigon Centre, your premier destination for shopping, dining, and entertainment in the heart of Ho Chi Minh City. Explore a world of luxury, culture, and convenience.",
 };
 
 export const viewport: Viewport = {
