@@ -34,7 +34,7 @@ export default function Footer() {
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black text-white grid grid-cols-5 justify-around h-[60px]">
+    <div className="fixed z-50 bottom-0 left-0 right-0 bg-black text-white grid grid-cols-5 justify-around h-[60px]">
       {[
         { icon: FaHome, label: "Trang chủ", link: '/' },
         { icon: FaHistory, label: "Lịch sử", link: '/lich-su' },

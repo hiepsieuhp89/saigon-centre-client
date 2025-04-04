@@ -39,28 +39,21 @@ export default function BannerHomePage() {
           <SwiperSlide>
             <img
               className="w-full h-full object-cover"
-              src="/images/sliders/1.jpg"
+              src="/images/slider1.png"
               alt=""
             />
           </SwiperSlide>
           <SwiperSlide>
             <img
               className="w-full h-full object-cover"
-              src="/images/sliders/2.jpg"
+              src="/images/slider2.png"
               alt=""
             />
           </SwiperSlide>
           <SwiperSlide>
             <img
               className="w-full h-full object-cover"
-              src="/images/sliders/3.jpg"
-              alt=""
-            />
-          </SwiperSlide>
-          <SwiperSlide>
-            <img
-              className="w-full h-full object-cover"
-              src="/images/sliders/4.png"
+              src="/images/slider3.png"
               alt=""
             />
           </SwiperSlide>

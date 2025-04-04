@@ -14,13 +14,13 @@ export default function RootLayout({
   const pathname = usePathname();
   if (pathname.startsWith("/dang-nhap") || pathname.startsWith("/dang-ki")) {
     return (
-      <div className="max-w-[1000px] w-full bg-[#5B5B5B] text-black mx-auto">
+      <div className="max-w-[1000px] w-full bg-[#111827] text-black mx-auto">
         {children}
       </div>
     );
   }
   return (
-    <div className="w-full bg-[#5B5B5B] text-black">
+    <div className="w-full bg-[#111827] text-black">
       <div className="w-full max-w-screen-sm mx-auto flex flex-col min-h-screen">
         <HeaderRootLayout />
         {children}

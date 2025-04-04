@@ -7,13 +7,15 @@ export interface IProduct {
   id: string;
   name: string;
   description: string;
-  price: number;
-  stock: number;
-  imageUrl: string;
-  categoryId: string;
-  storeId: string;
+  price: string;
+  stock?: number;
+  imageUrl: string | null;
+  categoryId?: string;
+  storeId?: string;
   createdAt: string;
   updatedAt: string;
+  deletedAt: string | null;
+  imageUrls: string[];
 }
 
 export interface ICreateProduct {

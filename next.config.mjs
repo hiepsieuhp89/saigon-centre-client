@@ -4,7 +4,7 @@ import TerserPlugin from "terser-webpack-plugin";
 const nextConfig = {
   experimental: {
     workerThreads: true,
-    cpus: 4, // Adjust based on your CPU
+    cpus: 4, 
   },
   reactStrictMode: false,
   swcMinify: true,
@@ -23,7 +23,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://mcl.dunghaysai.site/:path*", // Proxy to Backend
+        destination: "https://vin.dunghaysai.site/:path*", 
       },
     ];
   },

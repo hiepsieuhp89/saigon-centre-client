@@ -70,7 +70,7 @@ export default function InvestmentLevels() {
 
       <div className="relative w-full h-64 overflow-hidden">
         <img
-          src="/images/logo/1718975372552-1024x602.png"
+          src="/images/background.jpg"
           alt="SaigonCentre Kors logo"
           className="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-300"
         />
