@@ -137,7 +137,7 @@ export default function LuckyWheelDialog({
       setToastMessage(
         vipLevelUpgrade 
           ? "Chúc mừng bạn đã tìm được sản phẩm cao cấp, gửi sản phẩm này để nâng cấp đại lý của bạn!"
-          : "Tìm kiếm sản phẩm thành công!"
+          : "Kết hợp gửi đơn thành công!"
       );
       setToastSeverity(vipLevelUpgrade ? "info" : "success");
       setOpenToast(true);
@@ -247,7 +247,7 @@ export default function LuckyWheelDialog({
             component="h2"
             sx={{ mb: 3, fontWeight: "bold", color: "#fff", fontSize: { xs: "1.5rem", sm: "2rem", md: "2.25rem" } }}
           >
-            Tìm Kiếm Sản Phẩm
+            Kết hợp gửi đơn
           </Typography>
 
           {/* Hiển thị tổng số sản phẩm có sẵn */}
@@ -389,7 +389,7 @@ export default function LuckyWheelDialog({
                         {isSpinning ? (
                           <CircularProgress size={20} color="inherit" />
                         ) : (
-                          "Tìm kiếm ngay!"
+                          "Gửi đơn ngay!"
                         )}
                       </button>
                     ) : (

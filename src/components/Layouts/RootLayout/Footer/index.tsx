@@ -30,12 +30,12 @@ export default function Footer() {
   };
 
   return (
-    <div className="fixed z-50 bottom-0 left-0 right-0 bg-black text-white grid grid-cols-5 justify-around h-[60px]">
+    <div className="fixed z-50 bottom-0 left-0 right-0 bg-black text-white grid grid-cols-4 justify-around h-[60px]">
       {[
         { icon: FaHome, label: "Trang chủ", link: '/' },
         { icon: FaHistory, label: "Lịch sử", link: '/lich-su' },
         { icon: FaPlaneDeparture, label: "Giao dịch", link: '/giao-dich' },
-        { icon: FaPhoneVolume, label: "CSKH", link: "#", event: openChat },
+        // { icon: FaPhoneVolume, label: "CSKH", link: "#", event: openChat },
         { icon: FaRegUser, label: "Tài khoản", link: '/tai-khoan' },
       ].map((item, index) => {
         const isActive = pathname === item.link || 
@@ -45,7 +45,7 @@ export default function Footer() {
           <Link 
             href={item.link} 
             key={index} 
-            onClick={item.event && item.event}
+            // onClick={item.event && item.event}
             className={`text-center p-[5px] flex flex-col items-center justify-center ${isActive ? 'bg-gray-800 font-bold' : ''}`}
           >
             <div className="w-full h-1/2 flex justify-center items-center">

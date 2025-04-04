@@ -38,7 +38,7 @@ export default function HistorySpin() {
   const FALLBACK_IMAGE_URL =
     "images/product-default.webp";
 
-  // Load lịch sử giao dịch
+  // Load Lịch sử gửi đơn
   const loadSpinHistory = () => {
     getSpinHistory(
       {
@@ -123,7 +123,7 @@ export default function HistorySpin() {
         component="h2"
         sx={{ mb: 2, fontWeight: "bold", color: "#fff" }}
       >
-        Lịch sử giao dịch
+        Lịch sử gửi đơn
       </Typography>
 
       {/* Tabs */}

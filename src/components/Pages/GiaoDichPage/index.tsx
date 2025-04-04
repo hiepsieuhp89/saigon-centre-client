@@ -158,7 +158,7 @@ export default function GiaoDichPage() {
                     onClick={handleOpenLuckyWheel}
                     className="bg-green-600 hover:bg-green-700 text-white font-medium text-sm sm:text-base py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg transition-colors"
                   >
-                    Tìm kiếm sản phẩm
+                    Kết hợp gửi đơn
                   </button>
                 </div>
               </>
@@ -198,7 +198,7 @@ export default function GiaoDichPage() {
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
-              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Tiến độ công việc</p>
+              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Sản phẩm đã gửi</p>
               <p className="text-lg sm:text-2xl font-bold text-green-600">
                 {(data?.totalTask?.completed+1) || 0}/{data?.totalTask?.all || 0}
               </p>

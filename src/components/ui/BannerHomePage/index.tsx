@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import Marquee from "react-fast-marquee";
 import { FaChevronLeft, FaChevronRight, FaVolumeUp } from "react-icons/fa";
 import { useRef } from "react";
@@ -33,7 +33,11 @@ export default function BannerHomePage() {
           cssMode={true}
           pagination={true}
           loop={true}
-          modules={[Navigation]}
+          modules={[Navigation, Autoplay]}
+          autoplay={{
+            delay: 3000, // Thời gian delay giữa các slide (3 giây)
+            disableOnInteraction: false, // Tiếp tục tự động chuyển slide sau khi người dùng tương tác
+          }}
           className="mySwiper w-full h-[300px]"
         >
           <SwiperSlide>

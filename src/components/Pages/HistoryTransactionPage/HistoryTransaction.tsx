@@ -119,7 +119,7 @@ export default function HistoryTransaction() {
     <div className="flex flex-col justify-center min-h-screen bg-gray-50 py-8">
       <div className="bg-white rounded-xl p-2 shadow-sm w-full mb-8">
         <h1 className="text-2xl font-bold mb-6 text-gray-800">
-          Lịch sử giao dịch
+          Lịch sử gửi đơn
         </h1>
 
         <div className="flex space-x-3 mb-6">
