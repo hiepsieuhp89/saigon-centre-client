@@ -146,7 +146,16 @@ export default function HomePage() {
                   Mới
                 </Box>
                 <Image
-                  src={product.imageUrls?.[0] || "/images/white-image.png"}
+                  src={product.imageUrls?.[0] || 
+                    [
+                      "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=500&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?q=80&w=500&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?q=80&w=500&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1527719327859-c6ce80353573?q=80&w=500&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=500&auto=format&fit=crop",
+                      "https://images.unsplash.com/photo-1625772452859-1c03d5bf1137?q=80&w=500&auto=format&fit=crop",
+                    ][Math.floor(Math.random() * 6)]
+                  }
                   alt={product.name}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
