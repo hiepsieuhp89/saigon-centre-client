@@ -207,7 +207,8 @@ export default function GiaoDichPage() {
         </div>
       </div>
 
-      <InvestmentLevels />
+<div className="flex justify-center h-24">
+</div>
 
       {/* Đổi tên biến để phản ánh đúng chức năng */}
       <LuckyWheelDialog
