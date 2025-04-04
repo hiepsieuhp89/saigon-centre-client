@@ -14,17 +14,21 @@ import { styled } from "@mui/material/styles"
 const StyledPagination = styled(Pagination)(({ theme }) => ({
   "& .MuiPaginationItem-root": {
     color: "#ffffff",
-    borderRadius: '50%',
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    borderRadius: '0.375rem',
     [theme.breakpoints.down('sm')]: {
       minWidth: '32px',
       height: '32px',
       width: '32px',
       fontSize: '0.8rem',
     },
+    "&:hover": {
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
+    },
   },
   "& .MuiPaginationItem-page.Mui-selected": {
     backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
+    color: "#ffffff",
     fontWeight: "bold",
     height: '32px',
     width: '32px',
@@ -35,15 +39,9 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
     "&:hover": {
       backgroundColor: theme.palette.primary.dark,
     },
-    "&.MuiPaginationItem-root": {
-       color: theme.palette.primary.contrastText,
-    }
-  },
-  "& .MuiPaginationItem-page:hover": {
-    backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : theme.palette.action.hover,
   },
   "& .MuiPaginationItem-ellipsis": {
-    color: theme.palette.mode === 'dark' ? theme.palette.common.white : theme.palette.text.disabled,
+    color: "#ffffff",
     opacity: 0.6,
     [theme.breakpoints.down('sm')]: {
       minWidth: '20px',
@@ -51,10 +49,10 @@ const StyledPagination = styled(Pagination)(({ theme }) => ({
     },
   },
   "& .MuiPaginationItem-previousNext": {
-    
     color: "#ffffff",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
     "&:hover": {
-       backgroundColor: theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : theme.palette.action.hover,
+      backgroundColor: "rgba(255, 255, 255, 0.2)",
     },
     [theme.breakpoints.down('sm')]: {
       height: '32px',
@@ -89,8 +87,7 @@ export default function HomePage() {
   }
 
   return (
-    <Box sx={{ maxWidth: "lg", borderRadius: "0.375rem", pb: 14, mx: "auto", px: { xs: 2, sm: 3, md: 4 } }}>
-
+    <Box sx={{backgroundImage: "url('/images/background.jpg')", backgroundSize: "cover", backgroundPosition: "center", maxWidth: "lg", borderRadius: "0.375rem", pb: 14, mx: "auto", px: { xs: 2, sm: 3, md: 4 } }}>
       {/* Cards Section */}
       <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 2, padding: 2, paddingLeft: 0, paddingRight: 0 }}>
         {isLoading ? (
@@ -243,7 +240,15 @@ export default function HomePage() {
       </Box>
 
       {products?.meta?.itemCount && products?.meta?.itemCount > 0 && products?.meta?.pageCount && products.meta.pageCount > 1 && (
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+        <Box sx={{ 
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          borderRadius: "0.375rem", 
+          paddingTop: 1, 
+          paddingBottom: 1,  
+          display: "flex", 
+          justifyContent: "center", 
+          mt: 2 
+        }}>
           <StyledPagination
             count={products.meta.pageCount}
             page={currentPage}

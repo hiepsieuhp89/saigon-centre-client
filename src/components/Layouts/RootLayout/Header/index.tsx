@@ -2,39 +2,47 @@
 
 import { useUser } from "@/context/useUserContext";
 import { fNumberMoney } from "@/utils/format-number";
-import { Avatar } from "antd";
+import { Avatar, Button } from "antd";
 import { useRouter } from "next/navigation";
-import { FaUser, FaWallet } from "react-icons/fa";
+import { FaUser } from "react-icons/fa";
 
 export default function HeaderRootLayout() {
   const router = useRouter();
   const { user } = useUser();
 
   return (
-    <div className="bg-black p-2 flex items-center justify-between h-[74px]">
-      <div className="flex items-center gap-[5px]">
-        <div className="flex items-center gap-2">
-          <Avatar
-            onClick={() => router.push("/tai-khoan")}
-            className="cursor-pointer"
-            size={50}
-            icon={<FaUser className="text-[30px]" />}
-          />
-          <span className="text-white text-sm">{user?.fullName || ""}</span>
-        </div>
-        <div className="w-[max-content] min-w-28 h-[55px] rounded-full bg-[#7D7B7F] text-white flex items-center">
-          <div className="mx-[10px] flex gap-2 items-center">
-            <div>
-              <FaWallet className="text-[30px]" />
-            </div>
-            <div className="flex flex-col">
-              <div className="font-bold">{fNumberMoney(user?.balance || 0)}$</div>
-            </div>
-          </div>
-        </div>
+    <div className="bg-[#0a192f] shadow-md p-4 flex items-center justify-between h-[74px]">
+      {/* Logo on the left */}
+      <div 
+        className="flex items-center cursor-pointer" 
+        onClick={() => router.push("/")}
+      >
+        <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+          SaiGon Centre
+        </h1>
       </div>
-      <div className="text-yellow-500 font-bold ml-3">
-        {user?.vipLevel ? "Đại lý cấp "+ user?.vipLevel : "Chưa có cấp độ"}
+
+      {/* User info or login button on the right */}
+      <div className="flex items-center gap-4">
+        {user ? (
+          <div className="flex items-center gap-2">
+            <Avatar
+              onClick={() => router.push("/tai-khoan")}
+              className="cursor-pointer"
+              size={45}
+              icon={<FaUser className="text-[20px]" />}
+            />
+            <span className="text-white">{user?.fullName || ""}</span>
+          </div>
+        ) : (
+          <Button 
+            type="primary" 
+            onClick={() => router.push("/dang-nhap")} 
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            Đăng nhập
+          </Button>
+        )}
       </div>
     </div>
   );

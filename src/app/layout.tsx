@@ -1,11 +1,11 @@
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
-import "./globals.css";
 import RootLayout from "@/components/Layouts/RootLayout";
 import { UserProvider } from "@/context/useUserContext";
 import { ReactQueryProvider } from "@/provider/ReactQueryProvider";
+import type { Metadata, Viewport } from "next";
+import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import Script from "next/script";
+import { FaTelegramPlane } from "react-icons/fa";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -33,9 +33,32 @@ export default function layout({
           <UserProvider>
             <RootLayout>{children}</RootLayout>
             <Toaster position="top-center" />
+            {/* Telegram Button */}
+            <a
+              href="https://t.me/tttmvincomplaza"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                position: 'fixed',
+                bottom: '80px',
+                right: '20px',
+                backgroundColor: '#0088cc',
+                color: 'white',
+                borderRadius: '50%',
+                width: '60px',
+                height: '60px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 6px 12px rgba(0, 0, 0, 0.3)',
+                zIndex: 1000,
+              }}
+            >
+              <FaTelegramPlane size={28} />
+            </a>
           </UserProvider>
         </ReactQueryProvider>
-        <Script
+        {/* <Script
           id="tawkto"
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
@@ -88,7 +111,7 @@ export default function layout({
       };
     `,
           }}
-        />
+        /> */}
       </body>
     </html>
   );
