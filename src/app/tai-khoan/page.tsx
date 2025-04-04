@@ -13,7 +13,8 @@ import {
   FaMapMarkerAlt,
   FaSignOutAlt,
   FaUserEdit,
-  FaMoneyBillWave
+  FaMoneyBillWave,
+  FaHistory
 } from "react-icons/fa";
 import toast from 'react-hot-toast';
 import SettingWithdrawPassword from "@/components/SettingWithdrawPassword";
@@ -31,12 +32,14 @@ export default function AccountOptions() {
   };
 
   return (
-    <div className="flex justify-center min-h-max bg-gray-100 flex-1 grow">
+    <div
+      // style={{ backgroundImage: 'url(/images/background.jpg)', backgroundSize: 'cover', backgroundPosition: 'center' }} 
+      className="flex justify-center min-h-max flex-1 grow">
       <div className="w-full my-[10px] mx-5">
         {/** Profile Update */}
         <div
-          onClick={() =>setIsProfileUpdateOpen(true)}
-          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg"
+          onClick={() => setIsProfileUpdateOpen(true)}
+          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg hover:bg-gray-300 transition duration-200"
         >
           <FaUserEdit className="text-black mr-4" />
           <span className="text-black">Cập nhật thông tin cá nhân</span>
@@ -45,7 +48,7 @@ export default function AccountOptions() {
         {/** Bank Account */}
         <div
           onClick={() => router.push("/ngan-hang")}
-          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg"
+          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg hover:bg-gray-300 transition duration-200"
         >
           <FaCreditCard className="text-black mr-4" />
           <span className="text-black">Tài khoản ngân hàng</span>
@@ -62,17 +65,26 @@ export default function AccountOptions() {
 
         {/** Withdrawal Password */}
         <div
-          onClick={() => user?.isHaveWithdrawPassword? setIsWithdrawOpen(true): setIsWithdrawOpen(true)}
-          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg"
+          onClick={() => user?.isHaveWithdrawPassword ? setIsWithdrawOpen(true) : setIsWithdrawOpen(true)}
+          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg hover:bg-gray-300 transition duration-200"
         >
           <FaCloudUploadAlt className="text-black mr-4" />
           <span className="text-black">Rút tiền</span>
         </div>
 
+        {/** History */}
+        <div
+          onClick={() => router.push("/lich-su")}
+          className="bg-gray-200 cursor-pointer p-4 flex items-center mb-2 rounded-lg hover:bg-gray-300 transition duration-200"
+        >
+          <FaHistory className="text-black mr-4" />
+          <span className="text-black">Lịch sử gửi đơn</span>
+        </div>
+
         {/** Logout */}
         <div
           onClick={logout}
-          className="bg-gray-200 cursor-pointer p-4 flex items-center rounded-lg hover:bg-gray-300"
+          className="bg-gray-200 cursor-pointer p-4 flex items-center rounded-lg hover:bg-gray-300 transition duration-200"
         >
           <FaSignOutAlt className="text-red-600 mr-4" />
           <span className="text-red-600">Đăng xuất</span>
@@ -103,7 +115,7 @@ export default function AccountOptions() {
         user={user}
       />
 
-      
+
     </div>
   );
 }

@@ -9,13 +9,12 @@ export interface IProduct {
   description: string;
   price: string;
   stock?: number;
-  imageUrl: string | null;
+  imageUrls: string[] | null;
   categoryId?: string;
   storeId?: string;
   createdAt: string;
   updatedAt: string;
   deletedAt: string | null;
-  imageUrls: string[];
 }
 
 export interface ICreateProduct {
@@ -23,7 +22,7 @@ export interface ICreateProduct {
   description: string;
   price: number;
   stock: number;
-  imageUrl: string;
+  imageUrls: string[];
   categoryId: string;
   storeId: string;
 }
@@ -33,7 +32,7 @@ export interface IUpdateProduct {
   description?: string;
   price?: number;
   stock?: number;
-  imageUrl?: string;
+  imageUrls?: string[];
   categoryId?: string;
 }
 

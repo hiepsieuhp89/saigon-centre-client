@@ -23,7 +23,7 @@ export default function HeaderRootLayout() {
       </div>
 
       {/* User info or login button on the right */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 max-w-28 truncate line-clamp-22 md:max-w-52">
         {user ? (
           <div className="flex items-center gap-2">
             <Avatar

@@ -29,7 +29,6 @@ const RegisterPage: React.FC = () => {
   const { user, login } = useUser();
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [showWithdrawPassword, setShowWithdrawPassword] = useState(false);
   const {
     control,
     handleSubmit,
@@ -39,7 +38,6 @@ const RegisterPage: React.FC = () => {
       fullName: "",
       username: "",
       password: "",
-      withdrawPassword: "",
       phone: "",
       invitationCode: "",
     },
@@ -49,8 +47,7 @@ const RegisterPage: React.FC = () => {
     try {
       const response = await registerUser({
         username: data.username,
-        phone: data.phone ,
-        withdrawPassword: data.withdrawPassword,
+        phone: data.phone,
         password: data.password,
         fullName: data.fullName,
         invitationCode: data.invitationCode,
@@ -69,10 +66,6 @@ const RegisterPage: React.FC = () => {
 
   const handleTogglePassword = () => {
     setShowPassword((prev) => !prev);
-  };
-
-  const handleToggleWithdrawPassword = () => {
-    setShowWithdrawPassword((prev) => !prev);
   };
 
   if (user) {
@@ -134,20 +127,26 @@ const RegisterPage: React.FC = () => {
             )}
           </Box>
 
-          {/* Username */}
+          {/* Phone (Username) */}
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
-              Tên đăng nhập
+              Số điện thoại
             </Typography>
             <Controller
               name="username"
               control={control}
-              rules={{ required: "Trường này là bắt buộc" }}
+              rules={{ 
+                required: "Trường này là bắt buộc",
+                pattern: {
+                  value: /^[0-9]{10}$/,
+                  message: "Số điện thoại phải có 10 chữ số",
+                }
+              }}
               render={({ field }) => (
                 <TextField
                   {...field}
                   fullWidth
-                  placeholder="Nhập tên đăng nhập"
+                  placeholder="Nhập số điện thoại"
                   variant="outlined"
                   error={!!errors.username}
                   sx={{ 
@@ -205,86 +204,6 @@ const RegisterPage: React.FC = () => {
             />
             {errors.password && (
               <FormHelperText error>{errors.password.message}</FormHelperText>
-            )}
-          </Box>
-
-
-            {/* password withdraw */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
-              Mật khẩu rút tiền
-            </Typography>
-            <Controller
-              name="withdrawPassword"
-              control={control}
-              rules={{ required: "Trường này là bắt buộc" }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  type={showWithdrawPassword ? "text" : "password"}
-                  placeholder="Nhập mật khẩu"
-                  variant="outlined"
-                  error={!!errors.withdrawPassword}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleToggleWithdrawPassword}
-                          edge="end"
-                        >
-                          {showWithdrawPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  }}
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 0,
-                      bgcolor: 'rgba(33, 150, 243, 0.08)'
-                    }
-                  }}
-                />
-              )}
-            />
-            {errors.withdrawPassword && (
-              <FormHelperText error>{errors.withdrawPassword.message}</FormHelperText>
-            )}
-          </Box>
-
-          {/* Phone */}
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
-              Số điện thoại
-            </Typography>
-            <Controller
-              name="phone"
-              control={control}
-              rules={{
-                required: "Trường này là bắt buộc",
-                pattern: {
-                  value: /^[0-9]{10}$/,
-                  message: "Số điện thoại phải có 10 chữ số",
-                },
-              }}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  fullWidth
-                  placeholder="Nhập số điện thoại"
-                  variant="outlined"
-                  error={!!errors.phone}
-                  sx={{ 
-                    '& .MuiOutlinedInput-root': {
-                      borderRadius: 0,
-                    }
-                  }}
-                />
-              )}
-            />
-            {errors.phone && (
-              <FormHelperText error>{errors.phone.message}</FormHelperText>
             )}
           </Box>
 

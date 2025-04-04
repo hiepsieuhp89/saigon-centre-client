@@ -108,7 +108,7 @@ export function ProfileUpdateDialog({
               variant="outlined"
             />
 
-            <TextField
+            {/* <TextField
               label="Số điện thoại"
               type="tel"
               fullWidth
@@ -117,7 +117,7 @@ export function ProfileUpdateDialog({
               required
               variant="outlined"
               disabled={true}
-            />
+            /> */}
 
             <TextField
               label="Tên tài khoản"

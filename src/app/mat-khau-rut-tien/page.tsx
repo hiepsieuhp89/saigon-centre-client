@@ -14,14 +14,14 @@ export default function ChangeWithdrawPassword() {
       return;
     }
     // Handle password update logic
-    alert("Mật khẩu rút tiền đã được cập nhật!");
+    alert("Mật khẩu rút điểm đã được cập nhật!");
   };
 
   return (
     <div className="flex w-full py-[10px] px-5 bg-white">
       <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
         <h2 className="mb-6 text-xl font-bold text-center text-black">
-          Đổi mật khẩu rút tiền
+          Đổi mật khẩu rút điểm
         </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">

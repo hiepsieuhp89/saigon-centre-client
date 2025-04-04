@@ -53,12 +53,12 @@ export default function AddressForm() {
         </div>
 
         {/** Phone Number */}
-        <div className="mb-6 bg-gray-50 p-4 rounded-lg">
+        {/* <div className="mb-6 bg-gray-50 p-4 rounded-lg">
           <label className="block text-gray-700 font-medium mb-2">Số điện thoại</label>
           <p className="text-gray-800 font-semibold">
             {user?.phone.replace(/./g, "*") || "Không có"}
           </p>
-        </div>
+        </div> */}
 
         {/** Address Input with React Hook Form */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">

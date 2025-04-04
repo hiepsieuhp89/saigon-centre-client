@@ -27,8 +27,8 @@ export function DepositDialog({ open, onClose, user }: DepositDialogProps) {
 		},
 		validationSchema: Yup.object({
 			amount: Yup.number()
-				.required('Vui lòng nhập số tiền')
-				.min(200, 'Số tiền tối thiểu là 200 USD'),
+				.required('Vui lòng nhập Số điểm')
+				.min(200, 'Số điểm tối thiểu là 200 điểm'),
 		}),
 		onSubmit: async (values) => {
 			try {
@@ -70,11 +70,11 @@ export function DepositDialog({ open, onClose, user }: DepositDialogProps) {
 					</Alert>
 
 					<div className="space-y-2">
-						<Label htmlFor="amount">Số tiền (USD)</Label>
+						<Label htmlFor="amount">Số điểm</Label>
 						<Input
 							id="amount"
 							type="number"
-							placeholder="Nhập số tiền"
+							placeholder="Nhập Số điểm"
 							{...formik.getFieldProps('amount')}
 						/>
 						{formik.touched.amount && formik.errors.amount && (

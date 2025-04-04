@@ -11,11 +11,11 @@ interface ConfirmPrizeDialogProps {
   spinResult?: any; // Prop để nhận kết quả quay từ LuckyWheelDialog
 }
 
-export default function ConfirmPrizeDialog({ 
-  open, 
-  onClose, 
+export default function ConfirmPrizeDialog({
+  open,
+  onClose,
   winnerIndex,
-  spinResult 
+  spinResult
 }: ConfirmPrizeDialogProps) {
   const { spinProducts, isLoading: isLoadingProducts } = useGetAvailableSpinProducts();
   const { data: transactionData } = useGetTransaction();
@@ -25,17 +25,17 @@ export default function ConfirmPrizeDialog({
 
   // Lấy thông tin sản phẩm trúng thưởng từ API
   const winnerProduct = winnerIndex !== null && spinProducts ? spinProducts[winnerIndex] : null;
-  
+
   // Đảm bảo chuyển đổi chuỗi thành số
-  const productPrice = spinResult?.product?.price 
-    ? parseFloat(spinResult.product.price) 
+  const productPrice = spinResult?.product?.price
+    ? parseFloat(spinResult.product.price)
     : (winnerProduct?.price ? parseFloat(String(winnerProduct.price)) : 0);
-  
+
   const profit = spinResult?.profit || 0;
-  
+
   // Đảm bảo chuyển đổi chuỗi thành số
-  const userBalance = transactionData?.balance 
-    ? parseFloat(String(transactionData.balance)) 
+  const userBalance = transactionData?.balance
+    ? parseFloat(String(transactionData.balance))
     : 0;
 
   // console.log("Product Price (number):", productPrice);
@@ -43,16 +43,16 @@ export default function ConfirmPrizeDialog({
   // console.log("Is balance sufficient:", userBalance >= productPrice);
 
   const handleConfirm = () => {
-    // Kiểm tra số dư trước khi xác nhận - đảm bảo so sánh số với số
+    // Kiểm tra Số điểm trước khi xác nhận - đảm bảo so sánh số với số
     if (userBalance < productPrice) {
       const shortageAmount = productPrice - userBalance;
-      setErrorMessage(`Số dư của bạn không đủ. Bạn cần nạp thêm ${fNumberMoney(shortageAmount)} USD để gửi đi sản phẩm này.`);
+      setErrorMessage(`Số điểm của bạn không đủ. Bạn cần nạp thêm ${fNumberMoney(shortageAmount)} điểm để gửi đi sản phẩm này.`);
       return;
     }
-    
+
     setErrorMessage(null);
     setIsConfirming(true);
-    
+
     // Giả lập xác nhận thành công sau 1 giây
     setTimeout(() => {
       setIsConfirming(false);
@@ -102,30 +102,30 @@ export default function ConfirmPrizeDialog({
         ) : !spinProducts || spinProducts.length === 0 ? (
           <Alert severity="error">Không thể tải dữ liệu sản phẩm</Alert>
         ) : (
-          <div className="flex flex-col items-center space-y-4">
+          <div className="flex flex-col items-center space-y-4 max-w-full overflow-hidden">
             <div className="text-green-500 mb-2">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
             {/* Ưu tiên hiển thị thông tin từ spinResult nếu có */}
-            <div className="text-gray-600">
+            <div className="text-gray-600 w-full overflow-hidden">
               <p>Sản phẩm của bạn là:</p>
-              <img 
-                src={spinResult?.product?.imageUrl || (winnerIndex !== null && spinProducts ? spinProducts[winnerIndex].imageUrl : "")} 
-                alt={spinResult?.product?.name || (winnerIndex !== null && spinProducts ? spinProducts[winnerIndex].name : "")}
-                className="w-16 h-16 mx-auto my-2" 
+              <img
+                src={spinResult?.product?.imageUrls?.[0] || (winnerIndex !== null && spinProducts ? spinProducts[winnerIndex].imageUrls?.[0] : "images/white-image.png")}
+                alt={spinResult?.product?.name || (winnerIndex !== null && spinProducts ? spinProducts[winnerIndex].name : "images/white-image.png")}
+                className="w-16 h-16 mx-auto my-2"
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = "images/product-default.webp";
+                  (e.target as HTMLImageElement).src = "images/white-image.png";
                 }}
               />
 
-              <p className="font-bold mt-2">
+              <p className="font-bold mt-2 line-clamp-2 truncate max-w-full overflow-hidden">
                 {spinResult?.product?.name || (winnerIndex !== null && spinProducts ? spinProducts[winnerIndex].name : "")}
               </p>
-              
+
               {/* Hiển thị thông tin giá và lợi nhuận */}
-              <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+              <div className="mt-3 p-3 bg-gray-50 rounded-lg w-full">
                 <div className="flex justify-between mb-1">
                   <span className="text-sm text-gray-600">Giá sản phẩm:</span>
                   <span className="text-sm font-semibold">${fNumberMoney(productPrice)}</span>
@@ -136,19 +136,19 @@ export default function ConfirmPrizeDialog({
                 </div>
                 <div className="border-t border-gray-200 my-2"></div>
                 <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Số dư hiện tại:</span>
+                  <span className="text-sm text-gray-600">Số điểm hiện tại:</span>
                   <span className="text-sm font-semibold">${fNumberMoney(userBalance)}</span>
                 </div>
               </div>
             </div>
-            
+
             {/* Hiển thị thông báo lỗi nếu có */}
             {errorMessage && (
               <Alert severity="error" sx={{ width: '100%', mt: 2 }}>
                 {errorMessage}
-                <Button 
-                  color="error" 
-                  size="small" 
+                <Button
+                  color="error"
+                  size="small"
                   onClick={navigateToHomePage}
                   sx={{ mt: 1 }}
                 >
@@ -156,9 +156,9 @@ export default function ConfirmPrizeDialog({
                 </Button>
               </Alert>
             )}
-            
+
             <p className="text-sm text-gray-500">
-              {spinResult?.data?.isFrozen 
+              {spinResult?.data?.isFrozen
                 ? "Vui lòng liên hệ CSKH để mở khóa sản phẩm"
                 : "Hệ thống đã gửi đi sản phẩm"
               }

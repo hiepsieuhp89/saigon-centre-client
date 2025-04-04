@@ -12,7 +12,7 @@ const generateRandomAgent = () => {
 
 // Helper function to generate random profit
 const generateRandomProfit = () => {
-  // Generate amount between 20 and 500 USD
+  // Generate amount between 20 and 500 điểm
   const amount = Math.floor(20 + Math.random() * 481);
   return `$${fNumberMoney(amount)}`;
 };

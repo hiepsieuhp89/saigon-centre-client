@@ -59,6 +59,7 @@ export default function LuckyWheelDialog({
     newBalance: number;
     totalSpins: number;
     isFrozen: boolean;
+    missingPoints?: number;
   } | null>(null);
 
   // Sử dụng hooks để lấy dữ liệu và thực hiện spin
@@ -214,22 +215,22 @@ export default function LuckyWheelDialog({
   }
 
   // Data for the Doughnut chart - chỉ tạo khi có dữ liệu
-  const chartData = spinProducts ? {
-    datasets: [
-      {
-        data: spinProducts.map(() => 1), // Equal segments
-        backgroundColor: spinProducts.map(
-          (_, index) => wheelColors[index % wheelColors.length]
-        ),
-        borderColor: spinProducts.map(() => "white"),
-        borderWidth: 2,
-        cutout: "67%", // Adjusted for a larger gap
-        rotation: randomRotation,
-      },
-    ],
-    labels: spinProducts.map((item) => item.name),
-    hoverOffset: 3,
-  } : null;
+  // const chartData = spinProducts ? {
+  //   datasets: [
+  //     {
+  //       data: spinProducts.map(() => 1), // Equal segments
+  //       backgroundColor: spinProducts.map(
+  //         (_, index) => wheelColors[index % wheelColors.length]
+  //       ),
+  //       borderColor: spinProducts.map(() => "white"),
+  //       borderWidth: 2,
+  //       cutout: "67%", // Adjusted for a larger gap
+  //       rotation: randomRotation,
+  //     },
+  //   ],
+  //   labels: spinProducts.map((item) => item.name),
+  //   hoverOffset: 3,
+  // } : null;
 
   const circleSize = 200; // Size of the countdown circle
   const circleRadius = circleSize / 2;
@@ -324,17 +325,17 @@ export default function LuckyWheelDialog({
                     </div>
                     <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mb-2">
                       <img
-                        src={spinResult.data.data.product.imageUrl}
+                        src={spinResult.data.data.product.imageUrls?.[0]}
                         alt={spinResult.data.data.product.name}
                         width={80}
                         height={80}
                         className="object-cover w-full h-full"
                         onError={(e) => {
-                          (e.target as HTMLImageElement).src = "images/product-default.webp";
+                          (e.target as HTMLImageElement).src = "images/white-image.png";
                         }}
                       />
                     </div>
-                    <div className="text-base sm:text-xl font-bold text-yellow-400">
+                    <div className="text-base sm:text-xl font-bold text-yellow-400 line-clamp-2 truncate">
                       {spinResult.data.data.product.name}
                     </div>
 
@@ -349,7 +350,7 @@ export default function LuckyWheelDialog({
                         </div>
                         <div className="flex justify-between">
                           <span className="text-gray-300">
-                            Số dư sau giao dịch:
+                            Số điểm sau giao dịch:
                           </span>
                           <span className="text-green-400">
                             ${fNumberMoney(spinInfo.newBalance)}
@@ -365,7 +366,7 @@ export default function LuckyWheelDialog({
                         </div>
                         {spinInfo.isFrozen && (
                           <div className="text-red-400 text-xs mt-1">
-                            Sản phẩm đang chờ xử lý, vui lòng liên hệ CSKH để tiếp tục
+                            Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao, bạn thiếu {spinInfo.missingPoints || 0} điểm, vui lòng liên hệ CSKH để đổi điểm
                           </div>
                         )}
                       </div>

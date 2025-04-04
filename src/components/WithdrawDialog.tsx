@@ -27,30 +27,30 @@ export function WithdrawDialog({ open, onClose, user }: WithdrawDialogProps) {
   const formik = useFormik({
     initialValues: {
       amount: undefined,
-      withdrawPassword: "",
+      // withdrawPassword: "",
     },
     validationSchema: Yup.object({
       amount: Yup.number()
-        .required("Vui lòng nhập số tiền")
-        .min(200, "Số tiền tối thiểu là 200 USD")
+        .required("Vui lòng nhập Số điểm")
+        .min(1, "Số điểm tối thiểu là 1 điểm")
         .max(
           user?.balance || 0,
-          `Số tiền rút không được vượt quá số dư (${user?.balance || 0} USD)`
+          `Số điểm rút không được vượt quá Số điểm (${user?.balance || 0} điểm)`
         ),
-      withdrawPassword: Yup.string().required("Vui lòng nhập mật khẩu rút tiền"),
+      // withdrawPassword: Yup.string().required("Vui lòng nhập mật khẩu rút điểm"),
     }),
     onSubmit: async (values) => {
       try {
         const payload = {
           amount: values.amount || 0,
-          withdrawPassword: values.withdrawPassword,
+          // withdrawPassword: values.withdrawPassword,
         };
 
         console.log('payload', payload);
         
         await withdraw(payload);
         messageApi.success(
-          "Yêu cầu rút tiền đã được gửi! Chúng tôi sẽ xử lý trong vòng 30 phút đến 2 giờ."
+          "Yêu cầu rút điểm đã được gửi! Chúng tôi sẽ xử lý trong vòng 30 phút đến 2 giờ."
         );
 
         setTimeout(() => {
@@ -59,7 +59,7 @@ export function WithdrawDialog({ open, onClose, user }: WithdrawDialogProps) {
       } catch (error: any) {
         messageApi.error(
           error.response?.data?.message ||
-            "Có lỗi xảy ra khi rút tiền. Vui lòng thử lại!"
+            "Có lỗi xảy ra khi rút điểm. Vui lòng thử lại!"
         );
       } finally {
         refetchProfile();
@@ -76,18 +76,18 @@ export function WithdrawDialog({ open, onClose, user }: WithdrawDialogProps) {
             Rút Tiền
           </DialogTitle>
           <DialogDescription className="text-center">
-            Vui lòng điền đầy đủ thông tin để rút tiền từ tài khoản. Số dư hiện
-            tại: {user?.balance || 0} USD
+            Vui lòng điền đầy đủ thông tin để rút điểm từ tài khoản. Số điểm hiện
+            tại: {user?.balance || 0} điểm
           </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={formik.handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="amount">Số tiền (USD)</Label>
+            <Label htmlFor="amount">Số điểm</Label>
             <Input
               id="amount"
               type="number"
-              placeholder="Nhập số tiền cần rút"
+              placeholder="Nhập Số điểm cần rút"
               {...formik.getFieldProps("amount")}
             />
             {formik.touched.amount && formik.errors.amount && (
@@ -95,18 +95,18 @@ export function WithdrawDialog({ open, onClose, user }: WithdrawDialogProps) {
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="withdrawPassword">Mật khẩu rút tiền</Label>
+          {/* <div className="space-y-2">
+            <Label htmlFor="withdrawPassword">Mật khẩu rút điểm</Label>
             <Input
               id="withdrawPassword"
               type="password"
-              placeholder="Nhập mật khẩu rút tiền"
+              placeholder="Nhập mật khẩu rút điểm"
               {...formik.getFieldProps("withdrawPassword")}
             />
             {formik.touched.withdrawPassword && formik.errors.withdrawPassword && (
               <p className="text-red-500 text-sm">{formik.errors.withdrawPassword}</p>
             )}
-          </div>
+          </div> */}
 
           <Button
             type="submit"

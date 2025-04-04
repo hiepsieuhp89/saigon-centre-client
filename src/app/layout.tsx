@@ -34,7 +34,7 @@ export default function layout({
             <RootLayout>{children}</RootLayout>
             <Toaster position="top-center" />
             {/* Telegram Button */}
-            <a
+            {/* <a
               href="https://t.me/tttmvincomplaza"
               target="_blank"
               rel="noopener noreferrer"
@@ -55,7 +55,7 @@ export default function layout({
               }}
             >
               <FaTelegramPlane size={28} />
-            </a>
+            </a> */}
           </UserProvider>
         </ReactQueryProvider>
         {/* <Script

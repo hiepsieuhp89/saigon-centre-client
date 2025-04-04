@@ -115,12 +115,12 @@ const LoginPage: React.FC = () => {
           {/* Username */}
           <Box sx={{ mb: 2 }}>
             <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
-              Tên đăng nhập
+              Số điện thoại
             </Typography>
             <Controller
               name="username"
               control={control}
-              rules={{ required: "Tên đăng nhập là bắt buộc" }}
+              rules={{ required: "Số điện thoại là bắt buộc" }}
               render={({ field }) => (
                 <TextField
                   {...field}

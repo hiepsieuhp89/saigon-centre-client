@@ -36,7 +36,7 @@ export default function HistorySpin() {
   );
 
   const FALLBACK_IMAGE_URL =
-    "images/product-default.webp";
+    "images/white-image.png";
 
   // Load Lịch sử gửi đơn
   const loadSpinHistory = () => {
@@ -150,9 +150,9 @@ export default function HistorySpin() {
             >
               <div className="flex items-start gap-4 flex-col sm:flex-row">
                 {/* Logo và thông tin cơ bản */}
-                <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="flex items-center gap-3 w-full sm:w-auto line-clamp-2 truncate">
                   <img
-                    src={item.product?.imageUrl || FALLBACK_IMAGE_URL}
+                    src={item.product?.imageUrls?.[0] || FALLBACK_IMAGE_URL}
                     alt="SaigonCentre"
                     className="w-12 h-12 rounded-full"
                     onError={(e) => {

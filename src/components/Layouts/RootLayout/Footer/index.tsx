@@ -30,12 +30,11 @@ export default function Footer() {
   };
 
   return (
-    <div className="fixed z-50 bottom-0 left-0 right-0 bg-black text-white grid grid-cols-4 justify-around h-[60px]">
+    <div className="fixed z-50 bottom-0 left-0 right-0 bg-white text-gray-500 grid grid-cols-4 justify-around h-[60px] rounded-t-2xl shadow-lg">
       {[
         { icon: FaHome, label: "Trang chủ", link: '/' },
-        { icon: FaHistory, label: "Lịch sử", link: '/lich-su' },
-        { icon: FaPlaneDeparture, label: "Giao dịch", link: '/giao-dich' },
-        // { icon: FaPhoneVolume, label: "CSKH", link: "#", event: openChat },
+        { icon: FaPlaneDeparture, label: "Gửi đơn", link: '/giao-dich' },
+        { icon: FaHistory, label: "Ví tiền", link: '/vi-tien' },
         { icon: FaRegUser, label: "Tài khoản", link: '/tai-khoan' },
       ].map((item, index) => {
         const isActive = pathname === item.link || 
@@ -46,12 +45,12 @@ export default function Footer() {
             href={item.link} 
             key={index} 
             // onClick={item.event && item.event}
-            className={`text-center p-[5px] flex flex-col items-center justify-center ${isActive ? 'bg-gray-800 font-bold' : ''}`}
+            className={`text-center p-[5px] flex flex-col items-center justify-center ${isActive ? '' : ''}`}
           >
             <div className="w-full h-1/2 flex justify-center items-center">
-              <item.icon className={`text-base ${isActive ? 'text-blue-400' : ''}`} />
+              <item.icon className={`text-base ${isActive ? 'text-red-500' : ''}`} />
             </div>
-            <div className={`text-xs w-full h-1/2 flex justify-center items-center ${isActive ? 'font-bold' : ''}`}>
+            <div className={`text-xs w-full h-1/2 flex justify-center items-center ${isActive ? 'text-red-500 font-bold' : ''}`}>
               {item.label}
             </div>
           </Link>

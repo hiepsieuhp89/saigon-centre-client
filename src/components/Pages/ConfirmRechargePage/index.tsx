@@ -20,7 +20,7 @@ export default function ConfirmRechargePage() {
       centered: true,
       content: (
         <div>
-          <p>Bạn xác nhận đã chuyển khoản số tiền <strong>{amount ? `${Number(amount).toLocaleString("vi-VN")} USD` : "N/A"}</strong> vào tài khoản:</p>
+          <p>Bạn xác nhận đã chuyển khoản Số điểm <strong>{amount ? `${Number(amount).toLocaleString("vi-VN")} điểm` : "N/A"}</strong> vào tài khoản:</p>
           {/* <p><strong>Tên ngân hàng:</strong> {bankName || "N/A"}</p>
           <p><strong>Số tài khoản:</strong> {accountNumber || "N/A"}</p>
           <p><strong>Tên tài khoản:</strong> {accountName || "N/A"}</p> */}
@@ -74,8 +74,8 @@ export default function ConfirmRechargePage() {
             size="small"
             labelStyle={{ fontWeight: "bold" }}
           >
-            <Descriptions.Item label="Số Tiền">
-              {amount ? `${Number(amount).toLocaleString("vi-VN")} USD` : "N/A"}
+            <Descriptions.Item label="Số điểm">
+              {amount ? `${Number(amount).toLocaleString("vi-VN")} điểm` : "N/A"}
             </Descriptions.Item>
           </Descriptions>
 

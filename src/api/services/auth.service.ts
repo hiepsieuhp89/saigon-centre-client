@@ -51,6 +51,7 @@ export interface IUserProfile {
   vipPoint: number;
   gate: string;
   referralCode: string;
+  balance: number;
   bankName: string | null;
   bankNumber: string | null;
   bankCode: string | null;
@@ -75,7 +76,7 @@ export interface ISpinProduct {
   id: string;
   name: string;
   price: number;
-  imageUrl: string;
+  imageUrls: string[];
 }
 
 export interface ISpinResult {
@@ -127,7 +128,7 @@ export interface ISpinHistoryItem {
     description: string;
     price: string;
     stock: number;
-    imageUrl: string;
+    imageUrls: string[];
     gate: string;
     categoryId: string;
     storeId: string;

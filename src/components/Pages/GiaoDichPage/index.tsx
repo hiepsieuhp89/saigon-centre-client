@@ -136,36 +136,33 @@ export default function GiaoDichPage() {
     }
   };
 
-  
+
   return (
-    <div className="flex flex-col w-full min-h-screen bg-gray-50">
+    <div className="flex flex-col w-full min-h-screen">
       <BannerHomePage />
 
       <div className="flex items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-md space-y-4 sm:space-y-6">
           {/* Thông báo cấp độ - Hiển thị dựa trên VIP level */}
           <div
-            className={`${
-              isVipUser
-                ? "bg-blue-50 border border-blue-200"
-                : "bg-red-50 border border-red-200"
-            } rounded-lg p-3 sm:p-4`}
+            className={`rounded-lg p-3 sm:p-4`}
           >
             {isVipUser ? (
               <>
-                <div className="flex justify-center">
-                  <button
-                    onClick={handleOpenLuckyWheel}
-                    className="bg-green-600 hover:bg-green-700 text-white font-medium text-sm sm:text-base py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg transition-colors"
-                  >
-                    Kết hợp gửi đơn
-                  </button>
-                </div>
+                <button
+                  onClick={handleOpenLuckyWheel}
+                  className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                  </svg>
+                  <span>Kết hợp gửi đơn</span>
+                </button>
               </>
             ) : (
               <>
                 <p className="text-red-600 font-semibold text-center text-sm sm:text-base mb-2 sm:mb-3">
-                  Vui lòng liên hệ với CSKH 
+                  Vui lòng liên hệ với CSKH
                 </p>
                 <div className="flex justify-center">
                   <button
@@ -182,33 +179,33 @@ export default function GiaoDichPage() {
           {/* Thông tin tài khoản */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
-              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Tổng số dư khả dụng</p>
+              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Tổng Số điểm khả dụng</p>
               <p className="text-lg sm:text-2xl font-bold text-green-600">
-                ${fNumberMoney(data?.balance || 0)}
+                {fNumberMoney(data?.balance || 0)}
               </p>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
               <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">
-                Tổng lợi nhuận
+                Tổng điểm hoa hồng
               </p>
               <p className="text-lg sm:text-2xl font-bold text-green-600">
-                ${fNumberMoney(data?.totalProfit || 0)}
+                {fNumberMoney(data?.totalProfit || 0)}
               </p>
             </div>
 
             <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
               <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Sản phẩm đã gửi</p>
               <p className="text-lg sm:text-2xl font-bold text-green-600">
-                {(data?.totalTask?.completed+1) || 0}/{data?.totalTask?.all || 0}
+                {(data?.totalTask?.completed + 1) || 0}/{data?.totalTask?.all || 0}
               </p>
             </div>
           </div>
         </div>
       </div>
 
-<div className="flex justify-center h-24">
-</div>
+      <div className="flex justify-center h-24">
+      </div>
 
       {/* Đổi tên biến để phản ánh đúng chức năng */}
       <LuckyWheelDialog

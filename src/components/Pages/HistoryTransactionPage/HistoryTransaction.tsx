@@ -57,10 +57,10 @@ export default function HistoryTransaction() {
         ),
     },
     {
-      title: "Số tiền",
+      title: "Số điểm",
       dataIndex: "money",
       key: "money",
-      render: (money: any) => fNumberMoney(money) + " USD", // Format money using your fNumberMoney function
+      render: (money: any) => fNumberMoney(money) + " điểm", // Format money using your fNumberMoney function
     },
   ];
 
