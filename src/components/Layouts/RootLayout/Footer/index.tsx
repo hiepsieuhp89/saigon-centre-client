@@ -26,11 +26,7 @@ export default function Footer() {
   }, []);
 
   const openChat = () => {
-    if (window.Tawk_API && window.Tawk_API.maximize) {
-      window.Tawk_API.maximize(); // Opens the chat widget
-    } else {
-      console.log('Tawk.to is not loaded yet.');
-    }
+    window.open('https://t.me/tttmvincomplaza', '_blank');
   };
 
   return (
