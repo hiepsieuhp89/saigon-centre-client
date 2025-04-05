@@ -61,6 +61,7 @@ export interface IUserProfile {
   city?: string;
   district?: string;
   ward?: string;
+  totalSpins?: number;
 }
 
 export interface IBank {

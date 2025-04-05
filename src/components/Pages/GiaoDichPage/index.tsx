@@ -255,7 +255,7 @@ export default function GiaoDichPage() {
                 <p className="text-gray-600 text-xs sm:text-sm">Sản phẩm đã gửi</p>
               </div>
               <p className="text-lg sm:text-2xl font-bold text-green-600 ml-10">
-                {(data?.totalTask?.completed) || 0}/{data?.totalTask?.all || 0}
+                {(profile?.data?.totalSpins) || 0}/{data?.totalTask?.all || 0}
               </p>
             </div>
           </div>
