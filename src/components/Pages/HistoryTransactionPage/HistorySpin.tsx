@@ -236,13 +236,13 @@ export default function HistorySpin() {
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <p className="text-sm text-gray-500">Giá trị sản phẩm</p>
                     <p className="text-lg font-semibold text-green-600">
-                      ${fNumberMoney(Number(item.productPrice))}
+                      {fNumberMoney(Number(item.productPrice))}
                     </p>
                   </div>
                   <div className="bg-gray-50 p-3 rounded-lg">
                     <p className="text-sm text-gray-500">Lợi nhuận</p>
                     <p className="text-lg font-semibold text-red-600">
-                      ${fNumberMoney(Number(item.profit))}
+                      {fNumberMoney(Number(item.profit))}
                     </p>
                   </div>
                 </div>

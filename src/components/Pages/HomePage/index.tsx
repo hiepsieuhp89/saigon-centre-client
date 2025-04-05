@@ -2,15 +2,16 @@
 
 import type React from "react"
 
+import { useGetProducts } from "@/hooks/useProduct"
+import { Box, Button, CircularProgress, Pagination, Rating, Typography, useTheme } from "@mui/material"
+import { styled } from "@mui/material/styles"
+import { Spin } from "antd"
 import Image from "next/image"
 import { useState } from "react"
-import { CircularProgress, Pagination, Box, Typography, Button, Rating, useTheme } from "@mui/material"
-import { Spin } from "antd"
-import { useGetProducts } from "@/hooks/useProduct"
+import { FaStar, FaUnlock } from "react-icons/fa"
 import "slick-carousel/slick/slick-theme.css"
 import "slick-carousel/slick/slick.css"
-import { styled } from "@mui/material/styles"
-import { FaShoppingCart, FaUnlock, FaStar } from "react-icons/fa"
+import { fNumberMoney } from "@/utils/format-number"
 
 const StyledPagination = styled(Pagination)(({ theme }) => ({
   "& .MuiPaginationItem-root": {
@@ -264,7 +265,7 @@ export default function HomePage() {
                   }}
                 >
                   <Typography variant="subtitle2" sx={{ color: "#ef4444", fontWeight: "bold" }}>
-                    {Number(product.price).toLocaleString("vi-VN")}đ
+                    {fNumberMoney(product.price)} điểm
                   </Typography>
                   <Rating 
                     value={5} 

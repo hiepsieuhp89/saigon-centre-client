@@ -69,9 +69,9 @@ export default function ViTienPage() {
         
         <div className="mb-2">
           <div className="flex justify-between items-center mb-1">
-            <span className="text-2xl font-bold">${fNumberMoney(data?.totalProfit || 0)}</span>
-            <div className="bg-purple-100 rounded-full w-8 h-8 flex justify-center items-center">
-              <span className="text-red-600 font-bold">$</span>
+            <span className="text-2xl font-bold">{fNumberMoney(data?.totalProfit || 0)}</span>
+            <div className="bg-purple-100 rounded-full w-16 h-16 flex justify-center items-center">
+              <span className="text-red-600 font-bold">Điểm</span>
             </div>
           </div>
           <p className="text-gray-600">Thu Nhập Hoa Hồng</p>
@@ -96,7 +96,7 @@ export default function ViTienPage() {
           
           <div className="flex-1">
             <h3 className="font-semibold">Số điểm Khả Dụng</h3>
-            <p className="text-gray-600 text-lg font-bold">${fNumberMoney(profile?.data?.balance || 0)}</p>
+            <p className="text-gray-600 text-lg font-bold">{fNumberMoney(profile?.data?.balance || 0)}</p>
           </div>
         </div>
         

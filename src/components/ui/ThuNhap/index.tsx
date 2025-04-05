@@ -14,7 +14,7 @@ const generateRandomAgent = () => {
 const generateRandomProfit = () => {
   // Generate amount between 20 and 500 điểm
   const amount = Math.floor(20 + Math.random() * 481);
-  return `$${fNumberMoney(amount)}`;
+  return `${fNumberMoney(amount)}`;
 };
 
 // Helper function to generate current or future date/time

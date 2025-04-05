@@ -46,7 +46,7 @@ export default function ConfirmPrizeDialog({
     // Kiểm tra Số điểm trước khi xác nhận - đảm bảo so sánh số với số
     if (userBalance < productPrice) {
       const shortageAmount = productPrice - userBalance;
-      setErrorMessage(`Số điểm của bạn không đủ. Bạn cần nạp thêm ${fNumberMoney(shortageAmount)} điểm để gửi đi sản phẩm này.`);
+      setErrorMessage(`Số điểm của bạn không đủ. Bạn cần nạp thêm {fNumberMoney(shortageAmount)} điểm để gửi đi sản phẩm này.`);
       return;
     }
 
@@ -128,16 +128,16 @@ export default function ConfirmPrizeDialog({
               <div className="mt-3 p-3 bg-gray-50 rounded-lg w-full">
                 <div className="flex justify-between mb-1">
                   <span className="text-sm text-gray-600">Giá sản phẩm:</span>
-                  <span className="text-sm font-semibold">${fNumberMoney(productPrice)}</span>
+                  <span className="text-sm font-semibold">{fNumberMoney(productPrice)}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Tiền lãi:</span>
-                  <span className="text-sm font-semibold text-green-600">+${fNumberMoney(profit)}</span>
+                  <span className="text-sm font-semibold text-green-600">+{fNumberMoney(profit)}</span>
                 </div>
                 <div className="border-t border-gray-200 my-2"></div>
                 <div className="flex justify-between">
                   <span className="text-sm text-gray-600">Số điểm hiện tại:</span>
-                  <span className="text-sm font-semibold">${fNumberMoney(userBalance)}</span>
+                  <span className="text-sm font-semibold">{fNumberMoney(userBalance)}</span>
                 </div>
               </div>
             </div>
