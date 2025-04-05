@@ -279,9 +279,9 @@ export default function GiaoDichPage() {
                     <p className="font-medium text-gray-800">{item.productName}</p>
                     <p className="text-sm text-gray-500">{item.date}</p>
                   </div>
-                  <div className="text-right">
-                    <p className="font-semibold text-green-600">${item.price}</p>
-                  </div>
+                  {/* <div className="text-right">
+                    <p className="font-semibold text-green-600">{item.price}</p>
+                  </div> */}
                 </div>
               </div>
             ))}
