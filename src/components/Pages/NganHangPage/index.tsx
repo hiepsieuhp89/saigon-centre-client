@@ -23,28 +23,13 @@ export default function BankAccountInfo() {
     },
   });
 
-  const [bankOptions, setBankOptions] = useState<
-    Array<{ code: string; name: string }>
-  >([]);
-
-  // Populate bank options
+  // Sync user data with form when user changes
   useEffect(() => {
-    if (listBank) {
-      const formattedBanks = listBank.map((bank) => ({
-        code: bank.bankCode,
-        name: `${bank.bankCode} - ${bank.bankName}`,
-      }));
-      setBankOptions(formattedBanks);
-    }
-  }, [listBank]);
-
-  // Sync user data with form when user or bankOptions change
-  useEffect(() => {
-    if (user && bankOptions.length > 0) {
+    if (user) {
       setValue("accountNumber", user.bankNumber || "");
       setValue("bankCode", user.bankCode || "");
     }
-  }, [user, bankOptions, setValue]);
+  }, [user, setValue]);
 
   const onSubmit = (data: any) => {
     console.log("Form submitted:", data);
@@ -67,8 +52,6 @@ export default function BankAccountInfo() {
       console.error("Submit error:", error);
     }
   };
-
-  const selectedBankCode = watch("bankCode");
 
   return (
     <div className="flex flex-col min-h-screen pb-[70px]">
@@ -144,22 +127,16 @@ export default function BankAccountInfo() {
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Tên ngân hàng
               </label>
-              <select
+              <input
+                type="text"
+                placeholder="Nhập mã ngân hàng"
                 {...register("bankCode", {
-                  required: "Vui lòng chọn ngân hàng",
+                  required: "Mã ngân hàng là bắt buộc",
                 })}
-                className={`w-full px-4 py-3 rounded-lg border bg-white focus:ring-2 focus:ring-blue-500 transition-all ${
+                className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500 transition-all ${
                   errors.bankCode ? "border-red-500" : "border-gray-300"
                 }`}
-                value={selectedBankCode}
-              >
-                <option value="">--Chọn ngân hàng--</option>
-                {bankOptions.map((bank) => (
-                  <option key={bank.code} value={bank.code}>
-                    {bank.name}
-                  </option>
-                ))}
-              </select>
+              />
               {errors.bankCode && (
                 <p className="mt-2 text-sm text-red-600">
                   {errors.bankCode.message?.toString()}
