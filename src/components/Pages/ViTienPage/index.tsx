@@ -7,6 +7,7 @@ import { fNumberMoney } from "@/utils/format-number";
 import CloseIcon from '@mui/icons-material/Close';
 import { Button, Dialog, DialogContent, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import {
   Bar,
   BarChart,
@@ -444,7 +445,9 @@ export default function ViTienPage() {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => alert("Chức năng nạp tiền đang được phát triển. Vui lòng liên hệ CSKH để được hỗ trợ.")}
+              onClick={() => {
+                toast.error("Chức năng nạp tiền đang được phát triển. Vui lòng liên hệ CSKH để được hỗ trợ.");
+              }}
             >
               Nạp Tiền
             </Button>
