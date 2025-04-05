@@ -321,7 +321,7 @@ export default function LuckyWheelDialog({
                 ) : winnerIndex !== null && spinResult?.data?.data ? (
                   <div className="flex flex-col items-center space-y-2 bg-gray-800 p-3 sm:p-4 rounded-lg w-full max-w-[260px] sm:max-w-[280px] md:max-w-[300px]">
                     <div className="text-xl sm:text-2xl font-bold text-green-400">
-                      ${fNumberMoney(winningAmount)}
+                      {fNumberMoney(winningAmount)}
                     </div>
                     <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden mb-2">
                       <img
@@ -335,7 +335,7 @@ export default function LuckyWheelDialog({
                         }}
                       />
                     </div>
-                    <div className="text-base sm:text-xl font-bold text-yellow-400 line-clamp-2 truncate">
+                    <div className="text-base sm:text-xl font-bold text-yellow-400 line-clamp-2 truncate w-full line-clamp-1">
                       {spinResult.data.data.product.name}
                     </div>
 
@@ -345,7 +345,7 @@ export default function LuckyWheelDialog({
                         <div className="flex justify-between">
                           <span className="text-gray-300">Lợi nhuận dự kiến:</span>
                           <span className="text-green-400">
-                            ${fNumberMoney(spinInfo.profit)}
+                            {fNumberMoney(spinInfo.profit)}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -353,7 +353,7 @@ export default function LuckyWheelDialog({
                             Số điểm sau giao dịch:
                           </span>
                           <span className="text-green-400">
-                            ${fNumberMoney(spinInfo.newBalance)}
+                            {fNumberMoney(spinInfo.newBalance)}
                           </span>
                         </div>
                         <div className="flex justify-between">
@@ -365,8 +365,8 @@ export default function LuckyWheelDialog({
                           </span>
                         </div>
                         {spinInfo.isFrozen && (
-                          <div className="text-red-400 text-xs mt-1">
-                            Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao, bạn thiếu {spinInfo.missingPoints || 0} điểm, vui lòng liên hệ CSKH để đổi điểm
+                          <div className="text-amber-400 text-xs mt-1 font-semibold bg-gray-900 p-1.5 rounded-md shadow-inner">
+                            ✨ Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao! Bạn thiếu {spinInfo.missingPoints || 0} điểm, vui lòng liên hệ CSKH để đổi điểm
                           </div>
                         )}
                       </div>

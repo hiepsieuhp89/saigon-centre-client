@@ -22,6 +22,7 @@ interface UserContextType {
   logout: () => void;
   loadingGlobal: boolean;
   setLoadingGlobal: (value: boolean) => void;
+  profile: any | null;
 }
 
 const UserContext = createContext<UserContextType | null>(null);
@@ -74,7 +75,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{ user, setUser, logout, login, loadingGlobal, setLoadingGlobal }}
+      value={{ user, setUser, logout, login, loadingGlobal, setLoadingGlobal, profile }}
     >
       {loadingGlobal && (
         <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-opacity-50 z-[999]">

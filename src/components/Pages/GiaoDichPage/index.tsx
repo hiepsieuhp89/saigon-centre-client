@@ -1,25 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import BannerHomePage from "@/components/ui/BannerHomePage";
-import InvestmentLevels from "@/components/ui/ThuongDaiLy";
 import { useUser } from "@/context/useUserContext";
-import { useGetProfileData, useGetTransaction } from "@/hooks/useAuth";
-import { fNumberMoney, formatNumber } from "@/utils/format-number";
-import {
-  Chip,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import { useGetProfileData, useGetSpinHistory, useGetTransaction } from "@/hooks/useAuth";
+import { fNumberMoney } from "@/utils/format-number";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 // Thêm import cho các component mới
+import { ISpinHistoryItem } from "@/api/services/auth.service";
 import ConfirmPrizeDialog from "@/components/ui/ConfirmPrizeDialog";
 import LuckyWheelDialog from "@/components/ui/LuckyWheelDialog";
+import { FaBoxOpen, FaChessKing, FaCoins, FaHeadset, FaPlus, FaSync, FaWallet } from "react-icons/fa";
 
 // Add this after luckyWheelItems constant
 const spinHistory = [
@@ -69,6 +59,36 @@ export default function GiaoDichPage() {
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false);
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [spinResult, setSpinResult] = useState(null);
+  const [spinHistoryData, setSpinHistoryData] = useState<ISpinHistoryItem[]>([]);
+  const { mutate: getSpinHistory, isPending: isLoadingSpinHistory } =
+    useGetSpinHistory();
+
+
+  // Load Lịch sử gửi đơn
+  const loadSpinHistory = () => {
+    getSpinHistory(
+      {
+        page: 1,
+        take: 9999,
+        order: "DESC",
+      },
+      {
+        onSuccess: (response) => {
+          setSpinHistoryData(response.data);
+        },
+        onError: (err) => {
+          console.error("Error loading spin history:", err);
+          setSpinHistoryData([]);
+        },
+      }
+    );
+  };
+
+  useEffect(() => {
+    loadSpinHistory();
+  }, []);
+
+
 
   // Kiểm tra VIP level của người dùng
   const vipLevel = profile?.data?.vipLevel || 0;
@@ -136,75 +156,137 @@ export default function GiaoDichPage() {
     }
   };
 
+  console.log(spinHistoryData);
+
+  const isFrozen = useMemo(() => {
+    return spinHistoryData.find((item) => item.isFrozen && item.isSuccess);
+  }, [spinHistoryData]);
 
   return (
-    <div className="flex flex-col w-full min-h-screen">
+    <div className="flex flex-col w-full min-h-screen bg-gray-100">
       <BannerHomePage />
 
       <div className="flex items-center justify-center p-4 sm:p-6">
         <div className="w-full max-w-md space-y-4 sm:space-y-6">
           {/* Thông báo cấp độ - Hiển thị dựa trên VIP level */}
-          <div
-            className={`rounded-lg p-3 sm:p-4`}
-          >
+          <div className="rounded-lg p-3 sm:p-4">
             {isVipUser ? (
               <>
-                <button
-                  onClick={handleOpenLuckyWheel}
-                  className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
-                  </svg>
-                  <span>Kết hợp gửi đơn</span>
-                </button>
+                {isFrozen !== undefined && isFrozen !== null ? (
+                  <button
+                    onClick={handleOpenLuckyWheel}
+                    className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-medium text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                  >
+                    <FaChessKing className="h-16 w-16" />
+                    <span>Chúc mừng bạn đã nhận được sản phẩm may mắn hoa hồng cao, bạn cần nạp thêm {fNumberMoney(Number(isFrozen?.productPrice || 0) - Number(profile?.data?.balance ?? 0))} điểm, vui lòng liên hệ CSKH để đổi điểm</span>
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleOpenLuckyWheel}
+                    className="w-full bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-medium text-sm sm:text-base py-3 sm:py-4 px-6 sm:px-8 rounded-lg transition-all transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-2"
+                  >
+                    <FaPlus className="h-5 w-5" />
+                    <span>Kết hợp gửi đơn</span>
+                  </button>
+                )}
               </>
             ) : (
               <>
-                <p className="text-red-600 font-semibold text-center text-sm sm:text-base mb-2 sm:mb-3">
-                  Vui lòng liên hệ với CSKH
-                </p>
-                <div className="flex justify-center">
-                  <button
-                    onClick={() => openChat()}
-                    className="bg-red-600 hover:bg-red-700 text-white font-medium text-sm sm:text-base py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg transition-colors"
-                  >
-                    CSKH
-                  </button>
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <p className="text-yellow-800 font-semibold text-center text-sm sm:text-base mb-2 sm:mb-3">
+                    Vui lòng liên hệ với CSKH để được hỗ trợ
+                  </p>
+                  <div className="flex justify-center">
+                    <button
+                      onClick={() => openChat()}
+                      className="bg-red-600 hover:bg-red-700 text-white font-medium text-sm sm:text-base py-1.5 sm:py-2 px-3 sm:px-4 rounded-lg transition-colors flex items-center"
+                    >
+                      <FaHeadset className="mr-2" />
+                      CSKH
+                    </button>
+                  </div>
                 </div>
               </>
             )}
           </div>
 
+          {/* Refresh button */}
+          <div className="flex justify-end">
+            <button
+              onClick={handleRefreshData}
+              className="flex items-center text-gray-600 hover:text-red-600 transition-colors text-sm"
+            >
+              <FaSync className="mr-1" />
+              Làm mới dữ liệu
+            </button>
+          </div>
+
           {/* Thông tin tài khoản */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
-              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Tổng Số điểm khả dụng</p>
-              <p className="text-lg sm:text-2xl font-bold text-green-600">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md border border-gray-100">
+              <div className="flex items-center mb-2">
+                <div className="bg-blue-100 rounded-full p-2 mr-3">
+                  <FaWallet className="text-blue-600 h-4 w-4" />
+                </div>
+                <p className="text-gray-600 text-xs sm:text-sm">Tổng Số điểm khả dụng</p>
+              </div>
+              <p className="text-lg sm:text-2xl font-bold text-green-600 ml-10">
                 {fNumberMoney(data?.balance || 0)}
               </p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
-              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">
-                Tổng điểm hoa hồng
-              </p>
-              <p className="text-lg sm:text-2xl font-bold text-green-600">
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md border border-gray-100">
+              <div className="flex items-center mb-2">
+                <div className="bg-green-100 rounded-full p-2 mr-3">
+                  <FaCoins className="text-green-600 h-4 w-4" />
+                </div>
+                <p className="text-gray-600 text-xs sm:text-sm">Tổng điểm hoa hồng</p>
+              </div>
+              <p className="text-lg sm:text-2xl font-bold text-green-600 ml-10">
                 {fNumberMoney(data?.totalProfit || 0)}
               </p>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md">
-              <p className="text-gray-600 text-xs sm:text-sm mb-1 sm:mb-2">Sản phẩm đã gửi</p>
-              <p className="text-lg sm:text-2xl font-bold text-green-600">
-                {(data?.totalTask?.completed + 1) || 0}/{data?.totalTask?.all || 0}
+            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md border border-gray-100">
+              <div className="flex items-center mb-2">
+                <div className="bg-purple-100 rounded-full p-2 mr-3">
+                  <FaBoxOpen className="text-purple-600 h-4 w-4" />
+                </div>
+                <p className="text-gray-600 text-xs sm:text-sm">Sản phẩm đã gửi</p>
+              </div>
+              <p className="text-lg sm:text-2xl font-bold text-green-600 ml-10">
+                {(data?.totalTask?.completed) || 0}/{data?.totalTask?.all || 0}
               </p>
             </div>
           </div>
-        </div>
-      </div>
 
-      <div className="flex justify-center h-24">
+          {/* Recent transactions */}
+          <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md border border-gray-100">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="font-semibold text-gray-800">Sản phẩm mới thêm gần đây</h3>
+              <button
+                onClick={() => router.push('/lich-su')}
+                className="text-red-600 text-sm hover:underline"
+              >
+                Xem tất cả
+              </button>
+            </div>
+
+            {spinHistory.slice(0, 3).map((item) => (
+              <div key={item.id} className="border-b border-gray-100 py-3 last:border-0">
+                <div className="flex justify-between">
+                  <div>
+                    <p className="font-medium text-gray-800">{item.productName}</p>
+                    <p className="text-sm text-gray-500">{item.date}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-green-600">${item.price}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Đổi tên biến để phản ánh đúng chức năng */}

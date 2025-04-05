@@ -10,6 +10,7 @@ import { useGetProducts } from "@/hooks/useProduct"
 import "slick-carousel/slick/slick-theme.css"
 import "slick-carousel/slick/slick.css"
 import { styled } from "@mui/material/styles"
+import { FaShoppingCart, FaUnlock, FaStar } from "react-icons/fa"
 
 const StyledPagination = styled(Pagination)(({ theme }) => ({
   "& .MuiPaginationItem-root": {
@@ -66,6 +67,7 @@ export default function HomePage() {
   const pageSize = 10
   const theme = useTheme()
   const { data: products, isLoading } = useGetProducts(currentPage, pageSize)
+  
   if (isLoading) {
     return (
       <Box
@@ -75,6 +77,7 @@ export default function HomePage() {
           alignItems: "center",
           minHeight: "300px",
           width: "100%",
+          backgroundColor: "#f9fafb",
         }}
       >
         <Spin size="large" />
@@ -87,7 +90,33 @@ export default function HomePage() {
   }
 
   return (
-    <Box sx={{backgroundImage: "url('/images/background.jpg')", backgroundSize: "cover", backgroundPosition: "center", maxWidth: "lg", borderRadius: "0.375rem", pb: 14, mx: "auto", px: { xs: 2, sm: 3, md: 4 } }}>
+    <Box sx={{
+      backgroundImage: "url('/images/background.jpg')", 
+      backgroundSize: "cover", 
+      backgroundPosition: "center", 
+      maxWidth: "lg", 
+      borderRadius: "0.375rem", 
+      pb: 14, 
+      mx: "auto", 
+      px: { xs: 2, sm: 3, md: 4 }
+    }}>
+      {/* Header */}
+      <Box sx={{ 
+        textAlign: "center", 
+        py: 3, 
+        mb: 2,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+        borderRadius: "0.375rem",
+        mt: 2
+      }}>
+        <Typography variant="h5" component="h1" sx={{ color: "white", fontWeight: "bold" }}>
+          SaigonCentre Shop
+        </Typography>
+        <Typography variant="body2" sx={{ color: "rgba(255, 255, 255, 0.8)" }}>
+          Sản phẩm chất lượng cao
+        </Typography>
+      </Box>
+      
       {/* Cards Section */}
       <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 2, padding: 2, paddingLeft: 0, paddingRight: 0 }}>
         {isLoading ? (
@@ -111,6 +140,11 @@ export default function HomePage() {
                 borderRadius: "0.375rem",
                 boxShadow: theme.shadows[1],
                 overflow: "hidden",
+                transition: "transform 0.2s, box-shadow 0.2s",
+                "&:hover": {
+                  transform: "translateY(-4px)",
+                  boxShadow: theme.shadows[3],
+                }
               }}
             >
               <Box
@@ -125,18 +159,18 @@ export default function HomePage() {
                     position: "absolute",
                     top: 0,
                     right: 0,
-                    backgroundColor: "#60A5FA",
+                    backgroundColor: "#ef4444",
                     color: "white",
                     fontSize: "0.75rem",
                     fontWeight: 500,
                     padding: "0.125rem 0.5rem",
                     margin: "0.5rem",
-                    borderRadius: "0.125rem",
+                    borderRadius: "0.25rem",
                     zIndex: 10,
                     transition: "all 0.3s",
                     cursor: "pointer",
                     "&:hover": {
-                      backgroundColor: "#60A5FA",
+                      backgroundColor: "#dc2626",
                     },
                   }}
                 >
@@ -171,6 +205,7 @@ export default function HomePage() {
                 >
                   <Button
                     size="small"
+                    startIcon={<FaUnlock />}
                     sx={{
                       display: "flex",
                       alignItems: "center",
@@ -178,7 +213,7 @@ export default function HomePage() {
                       position: "absolute",
                       bottom: "0.25rem",
                       left: "0.25rem",
-                      backgroundColor: "#60A5FA",
+                      backgroundColor: "#ef4444",
                       color: "white",
                       padding: "0.125rem 0.5rem",
                       height: "24px",
@@ -189,17 +224,17 @@ export default function HomePage() {
                       transition: "all 0.3s",
                       textTransform: "none",
                       "&:hover": {
-                        backgroundColor: "#60A5FA",
+                        backgroundColor: "#dc2626",
                       },
                     }}
                   >
-                   <span className="text-xs"> Mở khóa</span>
+                   <span className="text-xs">Mở khóa</span>
                   </Button>
                 </Box>
               </Box>
               <Box
                 sx={{
-                  padding: "0.5rem",
+                  padding: "0.75rem",
                   backgroundColor: "#0E2532",
                   color: "white",
                 }}
@@ -224,14 +259,20 @@ export default function HomePage() {
                     display: "flex",
                     flexDirection: { xs: "row", sm: "column" },
                     justifyContent: "space-between",
-                    alignItems: { xs: "center", sm: "center" },
+                    alignItems: { xs: "center", sm: "flex-start" },
                     width: "100%",
                   }}
                 >
-                  <Typography variant="subtitle2" sx={{ color: theme.palette.error.main, fontWeight: "bold" }}>
+                  <Typography variant="subtitle2" sx={{ color: "#ef4444", fontWeight: "bold" }}>
                     {Number(product.price).toLocaleString("vi-VN")}đ
                   </Typography>
-                  <Rating value={5} readOnly size="small" sx={{ color: "yellow" }} />
+                  <Rating 
+                    value={5} 
+                    readOnly 
+                    size="small" 
+                    icon={<FaStar style={{ color: "#fbbf24" }} />}
+                    emptyIcon={<FaStar style={{ color: "rgba(255,255,255,0.2)" }} />}
+                  />
                 </Box>
               </Box>
             </Box>

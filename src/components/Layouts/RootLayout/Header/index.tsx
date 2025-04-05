@@ -5,21 +5,26 @@ import { fNumberMoney } from "@/utils/format-number";
 import { Avatar, Button } from "antd";
 import { useRouter } from "next/navigation";
 import { FaUser } from "react-icons/fa";
+import Image from "next/image";
 
 export default function HeaderRootLayout() {
   const router = useRouter();
   const { user } = useUser();
 
   return (
-    <div className="bg-[#0a192f] shadow-md p-4 flex items-center justify-between h-[74px]">
+    <div className="bg-white shadow-md p-4 flex items-center justify-between h-[74px]">
       {/* Logo on the left */}
       <div 
         className="flex items-center cursor-pointer" 
         onClick={() => router.push("/")}
       >
-        <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
-          SaiGon Centre
-        </h1>
+        <Image
+          src="/images/logo.png" // Update this path to your actual logo file
+          alt="SaiGon Centre Logo"
+          width={150}
+          height={40}
+          className="object-contain"
+        />
       </div>
 
       {/* User info or login button on the right */}
@@ -32,7 +37,7 @@ export default function HeaderRootLayout() {
               size={45}
               icon={<FaUser className="text-[20px]" />}
             />
-            <span className="text-white">{user?.fullName || ""}</span>
+            <span className="text-black">{user?.fullName || ""}</span>
           </div>
         ) : (
           <Button 
