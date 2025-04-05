@@ -222,7 +222,7 @@ export default function GiaoDichPage() {
           </div>
 
           {/* Thông tin tài khoản */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-1 gap-3 sm:gap-4">
             <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6 transition-all hover:shadow-md border border-gray-100">
               <div className="flex items-center mb-2">
                 <div className="bg-blue-100 rounded-full p-2 mr-3">
