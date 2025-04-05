@@ -14,6 +14,7 @@ import {
 import { ArcElement, Chart, Chart as ChartJS, Legend, Tooltip } from "chart.js";
 import { useEffect, useRef, useState } from "react";
 import { useTheme } from "@mui/material/styles";
+import { useUser } from "@/context/useUserContext";
 
 // Đăng ký các thành phần cần thiết của Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -34,6 +35,7 @@ export default function LuckyWheelDialog({
   onSpinResult,
 }: LuckyWheelDialogProps) {
   const theme = useTheme();
+  const { profile } = useUser();
   const [spinning, setSpinning] = useState(false);
   const [countdown, setCountdown] = useState<number>(5);
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
@@ -59,7 +61,6 @@ export default function LuckyWheelDialog({
     newBalance: number;
     totalSpins: number;
     isFrozen: boolean;
-    missingPoints?: number;
   } | null>(null);
 
   // Sử dụng hooks để lấy dữ liệu và thực hiện spin
@@ -93,11 +94,11 @@ export default function LuckyWheelDialog({
     setSpinInfo(null);
     setOpenToast(false);
     resetSpinMutation();
-    
+
     // Reset giá trị ngẫu nhiên
     let value = Math.random() * 20000;
     setWinningAmount(parseFloat(value.toString()));
-    
+
     // Reset rotation
     setRandomRotation(0);
     if (chartRef.current) {
@@ -128,7 +129,7 @@ export default function LuckyWheelDialog({
 
       // Tìm index của sản phẩm trúng trong danh sách
       const index = spinProducts ? spinProducts.findIndex((item) => item.id === product.id) : -1;
-      
+
       // Set winning product info regardless of whether it's in spinProducts
       setWinnerIndex(0); // Use 0 as default index for display purposes
       onWinnerSelected(0);
@@ -136,7 +137,7 @@ export default function LuckyWheelDialog({
 
       // Hiển thị toast thông báo
       setToastMessage(
-        vipLevelUpgrade 
+        vipLevelUpgrade
           ? "Chúc mừng bạn đã tìm được sản phẩm cao cấp, gửi sản phẩm này để nâng cấp đại lý của bạn!"
           : "Kết hợp gửi đơn thành công!"
       );
@@ -264,10 +265,10 @@ export default function LuckyWheelDialog({
 
           {isLoadingProducts ? (
             <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column", alignItems: "center", my: { xs: 5, sm: 8, md: 10 } }}>
-              <CircularProgress 
-                color="primary" 
+              <CircularProgress
+                color="primary"
                 size={40}
-                sx={{ 
+                sx={{
                   [theme.breakpoints.up('sm')]: {
                     width: 50,
                     height: 50
@@ -292,11 +293,11 @@ export default function LuckyWheelDialog({
                   }
                 }}
               />
-              <Typography 
-                variant="body1" 
-                sx={{ 
-                  mt: 2, 
-                  color: '#f3f3f3', 
+              <Typography
+                variant="body1"
+                sx={{
+                  mt: 2,
+                  color: '#f3f3f3',
                   fontWeight: 'medium',
                   animation: 'pulse 1.5s infinite ease-in-out',
                   fontSize: { xs: '0.875rem', sm: '1rem' }
@@ -366,7 +367,7 @@ export default function LuckyWheelDialog({
                         </div>
                         {spinInfo.isFrozen && (
                           <div className="text-amber-400 text-xs mt-1 font-semibold bg-gray-900 p-1.5 rounded-md shadow-inner">
-                            ✨ Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao! Bạn thiếu {spinInfo.missingPoints || 0} điểm, vui lòng liên hệ CSKH để đổi điểm
+                            ✨ Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao! Bạn thiếu {(profile?.data?.balance || 0) - (spinInfo.newBalance || 0)} điểm, vui lòng liên hệ CSKH để đổi điểm
                           </div>
                         )}
                       </div>
