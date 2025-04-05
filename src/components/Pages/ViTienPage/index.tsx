@@ -2,8 +2,10 @@
 
 import { useUser } from "@/context/useUserContext";
 import { useGetProfileData, useGetTransaction } from "@/hooks/useAuth";
+import { useGetTransactionHistory, useWithdraw } from "@/hooks/useTransaction";
 import { fNumberMoney } from "@/utils/format-number";
-import Link from "next/link";
+import CloseIcon from '@mui/icons-material/Close';
+import { Button, Dialog, DialogContent, DialogTitle, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   Bar,
@@ -14,8 +16,6 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Dialog, DialogContent, DialogTitle, IconButton, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
 
 // Fake data for the chart
 const chartData = [
@@ -33,21 +33,6 @@ const chartData = [
   { name: "T12", thu: 4000, chi: 3500 },
 ];
 
-// Fake data for deposit history
-const depositHistoryData = [
-  { id: 1, date: "2023-10-15", amount: 5000000, status: "Thành công", method: "Chuyển khoản ngân hàng" },
-  { id: 2, date: "2023-09-28", amount: 3000000, status: "Thành công", method: "Ví điện tử" },
-  { id: 3, date: "2023-08-17", amount: 2000000, status: "Thành công", method: "Chuyển khoản ngân hàng" },
-  { id: 4, date: "2023-07-05", amount: 1500000, status: "Thành công", method: "Thẻ tín dụng" },
-];
-
-// Fake data for withdrawal history
-const withdrawalHistoryData = [
-  { id: 1, date: "2023-10-10", amount: 2000000, status: "Thành công", bank: "Vietcombank", account: "****5678" },
-  { id: 2, date: "2023-09-15", amount: 1500000, status: "Thành công", bank: "Techcombank", account: "****1234" },
-  { id: 3, date: "2023-08-20", amount: 3000000, status: "Đang xử lý", bank: "Vietcombank", account: "****5678" },
-];
-
 export default function ViTienPage() {
   const { setLoadingGlobal } = useUser();
   const { data, isFetching, refetch: refetchTransaction } = useGetTransaction();
@@ -58,11 +43,34 @@ export default function ViTienPage() {
   const [withdrawDialogOpen, setWithdrawDialogOpen] = useState(false);
   const [withdrawHistoryDialogOpen, setWithdrawHistoryDialogOpen] = useState(false);
 
+  // Add transaction history state and API call
+  const [transactionHistory, setTransactionHistory] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    limit: 10,
+  });
+  const [activeFilter, setActiveFilter] = useState<"all" | "pending" | "completed" | "rejected">("all");
+  const { mutate: getTransactionHistory, isPending: isLoadingHistory } = useGetTransactionHistory();
+
+  // Add withdraw mutation
+  const { mutate: withdrawMutation, isPending: isWithdrawing } = useWithdraw();
+
   // State for withdraw form
   const [withdrawAmount, setWithdrawAmount] = useState("");
   const [bankName, setBankName] = useState("");
+  const [bankCode, setBankCode] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [accountName, setAccountName] = useState("");
+
+  // Add state for error message
+  const [withdrawError, setWithdrawError] = useState("");
+
+  // Add transaction type filter
+  const [transactionType, setTransactionType] = useState<string>("all");
+
+  // Replace separate dialogs with a single transaction history dialog
+  const [transactionHistoryDialogOpen, setTransactionHistoryDialogOpen] = useState(false);
 
   useEffect(() => {
     if (isFetching) {
@@ -73,25 +81,132 @@ export default function ViTienPage() {
   }, [isFetching, setLoadingGlobal]);
 
   // Handle dialog open/close
-  const handleOpenDepositDialog = () => setDepositDialogOpen(true);
+  const handleOpenDepositDialog = () => {
+    setTransactionType("recharge");
+    setDepositDialogOpen(true);
+  };
   const handleCloseDepositDialog = () => setDepositDialogOpen(false);
 
   const handleOpenWithdrawDialog = () => setWithdrawDialogOpen(true);
   const handleCloseWithdrawDialog = () => setWithdrawDialogOpen(false);
 
-  const handleOpenWithdrawHistoryDialog = () => setWithdrawHistoryDialogOpen(true);
+  const handleOpenWithdrawHistoryDialog = () => {
+    setTransactionType("withdraw");
+    setWithdrawHistoryDialogOpen(true);
+  };
   const handleCloseWithdrawHistoryDialog = () => setWithdrawHistoryDialogOpen(false);
+
+  // Fetch transaction history
+  const fetchTransactionHistory = () => {
+    const params: any = {
+      page: pagination.current,
+      limit: pagination.limit,
+      type: transactionType == "all" ? undefined : transactionType,
+    };
+    
+    // Only add status if not "all"
+    if (activeFilter !== "all") {
+      params.status = activeFilter;
+    }
+    
+    // Add type filter if not "all"
+    if (transactionType !== "all") {
+      params.type = transactionType;
+    }
+    
+    getTransactionHistory(
+      params,
+      {
+        onSuccess: (response: any) => {
+          setTransactionHistory(response?.data || []);
+          setTotalPages(response?.meta?.total || 0);
+        },
+        onError: (err: any) => {
+          console.log(err);
+          setTransactionHistory([]);
+        },
+      }
+    );
+  };
+
+  // Handle dialog open/close
+  const handleOpenTransactionHistoryDialog = () => {
+    setTransactionHistoryDialogOpen(true);
+  };
+  
+  const handleCloseTransactionHistoryDialog = () => {
+    setTransactionHistoryDialogOpen(false);
+  };
+
+  // Handle filter change
+  const handleFilterChange = (filter: "all" | "pending" | "completed" | "rejected") => {
+    setActiveFilter(filter);
+    setPagination({
+      current: 1,
+      limit: 10,
+    });
+  };
+
+  // Handle transaction type change
+  const handleTypeChange = (type: string) => {
+    setTransactionType(type);
+    setPagination({
+      current: 1,
+      limit: 10,
+    });
+  };
+
+  // Handle pagination change
+  const handlePageChange = (event: React.ChangeEvent<unknown>, page: number) => {
+    setPagination({
+      ...pagination,
+      current: page,
+    });
+  };
+
+  // Fetch transaction history when dialog opens or filter/pagination/type changes
+  useEffect(() => {
+    if (transactionHistoryDialogOpen) {
+      fetchTransactionHistory();
+    }
+  }, [transactionHistoryDialogOpen, activeFilter, pagination, transactionType]);
 
   // Handle withdraw form submission
   const handleWithdrawSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert(`Yêu cầu rút ${withdrawAmount} đã được gửi và đang chờ xử lý`);
-    handleCloseWithdrawDialog();
-    // Reset form
-    setWithdrawAmount("");
-    setBankName("");
-    setAccountNumber("");
-    setAccountName("");
+    
+    // Reset error message
+    setWithdrawError("");
+    
+    // Call the withdraw API
+    withdrawMutation({
+      amount: Number(withdrawAmount),
+      bankName: bankName,
+      bankCode: bankName, // Using bankName as bankCode for simplicity
+      accountNumber: accountNumber,
+      accountName: accountName
+    }, {
+      onSuccess: (data: any) => {
+        alert(`Yêu cầu rút ${withdrawAmount} đã được gửi và đang chờ xử lý`);
+        handleCloseWithdrawDialog();
+        // Reset form
+        setWithdrawAmount("");
+        setBankName("");
+        setBankCode("");
+        setAccountNumber("");
+        setAccountName("");
+        // Refresh profile data to get updated balance
+        refetchProfile();
+      },
+      onError: (error: any) => {
+        // Display the error message from the API response if available
+        if (error.response?.data?.message) {
+          setWithdrawError(error.response.data.message);
+        } else {
+          setWithdrawError(`Có lỗi xảy ra: ${error.message || 'Không thể kết nối đến máy chủ'}`);
+        }
+      }
+    });
   };
 
   return (
@@ -150,9 +265,9 @@ export default function ViTienPage() {
           </div>
         </div>
 
-        {/* Deposit Records Button */}
+        {/* Transaction History Button */}
         <div
-          onClick={handleOpenDepositDialog}
+          onClick={handleOpenTransactionHistoryDialog}
           className="flex items-center py-3 border-b cursor-pointer hover:bg-gray-50 transition-colors"
         >
           <div className="bg-purple-100 rounded-lg w-12 h-12 flex justify-center items-center mr-4">
@@ -161,15 +276,15 @@ export default function ViTienPage() {
             </svg>
           </div>
           <div className="flex-1">
-            <h3 className="font-semibold">Hồ Sơ Nạp Tiền</h3>
-            <p className="text-gray-600 text-sm">Xem Lịch Sử Nạp Tiền</p>
+            <h3 className="font-semibold">Lịch Sử Giao Dịch</h3>
+            <p className="text-gray-600 text-sm">Xem Lịch Sử Nạp/Rút Tiền</p>
           </div>
         </div>
 
         {/* Withdraw Button */}
         <div
           onClick={handleOpenWithdrawDialog}
-          className="flex items-center py-3 border-b cursor-pointer hover:bg-gray-50 transition-colors"
+          className="flex items-center py-3 cursor-pointer hover:bg-gray-50 transition-colors"
         >
           <div className="bg-purple-100 rounded-lg w-12 h-12 flex justify-center items-center mr-4">
             <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,71 +296,157 @@ export default function ViTienPage() {
             <p className="text-gray-600 text-sm">Rút Tiền Về Tài Khoản Ngân Hàng Của Bạn</p>
           </div>
         </div>
-
-        {/* Withdrawal History Button */}
-        <div
-          onClick={handleOpenWithdrawHistoryDialog}
-          className="flex items-center py-3 cursor-pointer hover:bg-gray-50 transition-colors"
-        >
-          <div className="bg-purple-100 rounded-lg w-12 h-12 flex justify-center items-center mr-4">
-            <svg className="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
-            </svg>
-          </div>
-          <div className="flex-1">
-            <h3 className="font-semibold">Lịch Sử Rút Tiền</h3>
-            <p className="text-gray-600 text-sm">Xem Lịch Sử Rút Tiền</p>
-          </div>
-        </div>
       </div>
 
-      {/* Deposit History Dialog */}
+      {/* Transaction History Dialog */}
       <Dialog
-        open={depositDialogOpen}
-        onClose={handleCloseDepositDialog}
+        open={transactionHistoryDialogOpen}
+        onClose={handleCloseTransactionHistoryDialog}
         fullWidth
         maxWidth="sm"
       >
         <DialogTitle className="flex justify-between items-center">
-          <span>Lịch Sử Nạp Tiền</span>
-          <IconButton onClick={handleCloseDepositDialog} size="small">
+          <span>Lịch Sử Giao Dịch</span>
+          <IconButton onClick={handleCloseTransactionHistoryDialog} size="small">
             <CloseIcon />
           </IconButton>
         </DialogTitle>
         <DialogContent>
+          {/* Transaction Type Filter */}
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Loại Giao Dịch
+            </label>
+            <select
+              value={transactionType}
+              onChange={(e) => handleTypeChange(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
+            >
+              <option value="all">Tất cả</option>
+              <option value="recharge">Nạp tiền</option>
+              <option value="withdraw">Rút tiền</option>
+              <option value="bonus">Thưởng</option>
+              <option value="payment">Thanh toán</option>
+              <option value="spin_reward">Phần thưởng quay</option>
+            </select>
+          </div>
+          
+          {/* Status Filter */}
+          <div className="flex space-x-3 mb-6 overflow-x-auto">
+            <button
+              className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                activeFilter === "all"
+                  ? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+              onClick={() => handleFilterChange("all")}
+            >
+              TOÀN BỘ
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                activeFilter === "completed"
+                  ? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+              onClick={() => handleFilterChange("completed")}
+            >
+              HOÀN THÀNH
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                activeFilter === "pending"
+                  ? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+              onClick={() => handleFilterChange("pending")}
+            >
+              CHỜ XỬ LÝ
+            </button>
+            <button
+              className={`px-4 py-2 rounded-lg transition-all duration-200 font-medium ${
+                activeFilter === "rejected"
+                  ? "bg-blue-600 text-white shadow-sm hover:bg-blue-700"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+              onClick={() => handleFilterChange("rejected")}
+            >
+              TỪ CHỐI
+            </button>
+          </div>
+
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
                 <TableRow>
                   <TableCell>Ngày</TableCell>
-                  <TableCell>Số tiền</TableCell>
-                  <TableCell>Phương thức</TableCell>
+                  <TableCell>Loại</TableCell>
+                  <TableCell>Số Điểm</TableCell>
                   <TableCell>Trạng thái</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {depositHistoryData.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{fNumberMoney(row.amount)}</TableCell>
-                    <TableCell>{row.method}</TableCell>
-                    <TableCell>
-                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">
-                        {row.status}
-                      </span>
-                    </TableCell>
+                {isLoadingHistory ? (
+                  <TableRow>
+                    <TableCell colSpan={4} align="center">Đang tải...</TableCell>
                   </TableRow>
-                ))}
+                ) : transactionHistory.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={4} align="center">Không có dữ liệu</TableCell>
+                  </TableRow>
+                ) : (
+                  transactionHistory.map((row: any) => (
+                    <TableRow key={row.id}>
+                      <TableCell>{new Date(row.createdAt).toLocaleDateString('vi-VN')}</TableCell>
+                      <TableCell>
+                        {row.type === 'recharge' ? 'Nạp tiền' : 
+                         row.type === 'withdraw' ? 'Rút tiền' : 
+                         row.type === 'bonus' ? 'Thưởng' : 
+                         row.type === 'payment' ? 'Thanh toán' : 
+                         row.type === 'spin_reward' ? 'Phần thưởng quay' : row.type}
+                      </TableCell>
+                      <TableCell>{fNumberMoney(row.money)}</TableCell>
+                      <TableCell>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          row.status === 'completed' ? 'bg-green-100 text-green-800' : 
+                          row.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                          'bg-red-100 text-red-800'
+                        }`}>
+                          {row.status === 'completed' ? 'Thành công' : 
+                           row.status === 'pending' ? 'Đang xử lý' : 'Từ chối'}
+                        </span>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>
+          
+          <div className="mt-4 flex justify-center">
+            <Pagination 
+              count={Math.ceil(totalPages / pagination.limit)} 
+              page={pagination.current}
+              onChange={handlePageChange}
+              color="primary"
+            />
+          </div>
+          
           <div className="mt-4 flex justify-center">
             <Button
               variant="contained"
               color="primary"
+              onClick={handleOpenWithdrawDialog}
+              className="mr-2"
+            >
+              Rút Tiền
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
               onClick={() => alert("Chức năng nạp tiền đang được phát triển. Vui lòng liên hệ CSKH để được hỗ trợ.")}
             >
-              Nạp Tiền Mới
+              Nạp Tiền
             </Button>
           </div>
         </DialogContent>
@@ -265,6 +466,14 @@ export default function ViTienPage() {
           </IconButton>
         </DialogTitle>
         <DialogContent>
+          {/* Display error message if there is one */}
+          {withdrawError && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-sm text-red-800">
+              <p className="font-medium">Lỗi:</p>
+              <p>{withdrawError}</p>
+            </div>
+          )}
+          
           <form onSubmit={handleWithdrawSubmit} className="space-y-4 mt-2">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -277,7 +486,7 @@ export default function ViTienPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Số Tiền Muốn Rút *
+                Số Điểm Muốn Rút *
               </label>
               <input
                 type="number"
@@ -285,7 +494,7 @@ export default function ViTienPage() {
                 value={withdrawAmount}
                 onChange={(e) => setWithdrawAmount(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                placeholder="Nhập số tiền"
+                placeholder="Nhập Số Điểm"
               />
             </div>
 
@@ -297,7 +506,10 @@ export default function ViTienPage() {
                 type="text"
                 required
                 value={bankName}
-                onChange={(e) => setBankName(e.target.value)}
+                onChange={(e) => {
+                  setBankName(e.target.value);
+                  setBankCode(e.target.value); // Set bankCode same as bankName
+                }}
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
                 placeholder="VD: Vietcombank, Techcombank..."
               />
@@ -337,8 +549,9 @@ export default function ViTienPage() {
                 variant="contained"
                 color="primary"
                 fullWidth
+                disabled={isWithdrawing}
               >
-                Xác Nhận Rút Tiền
+                {isWithdrawing ? "Đang xử lý..." : "Xác Nhận Rút Tiền"}
               </Button>
             </div>
           </form>
@@ -346,54 +559,12 @@ export default function ViTienPage() {
           <div className="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md text-sm text-yellow-800">
             <p className="font-medium">Lưu ý:</p>
             <ul className="list-disc pl-5 mt-1 space-y-1">
-              <li>Số tiền tối thiểu để rút là 100,000 VND</li>
+              <li>Số Điểm tối thiểu để rút là 100,000 VND</li>
               <li>Thời gian xử lý từ 1-3 ngày làm việc</li>
               <li>Phí rút tiền: 0%</li>
+              <li>Bạn cần có đủ số lần quay để rút tiền</li>
             </ul>
           </div>
-        </DialogContent>
-      </Dialog>
-
-      {/* Withdrawal History Dialog */}
-      <Dialog
-        open={withdrawHistoryDialogOpen}
-        onClose={handleCloseWithdrawHistoryDialog}
-        fullWidth
-        maxWidth="sm"
-      >
-        <DialogTitle className="flex justify-between items-center">
-          <span>Lịch Sử Rút Tiền</span>
-          <IconButton onClick={handleCloseWithdrawHistoryDialog} size="small">
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <DialogContent>
-          <TableContainer component={Paper}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Ngày</TableCell>
-                  <TableCell>Số tiền</TableCell>
-                  <TableCell>Ngân hàng</TableCell>
-                  <TableCell>Trạng thái</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {withdrawalHistoryData.map((row) => (
-                  <TableRow key={row.id}>
-                    <TableCell>{row.date}</TableCell>
-                    <TableCell>{fNumberMoney(row.amount)}</TableCell>
-                    <TableCell>{row.bank}</TableCell>
-                    <TableCell>
-                      <span className={`px-2 py-1 ${row.status === 'Thành công' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'} rounded-full text-xs`}>
-                        {row.status}
-                      </span>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
         </DialogContent>
       </Dialog>
     </div>

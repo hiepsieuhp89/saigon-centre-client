@@ -2,6 +2,7 @@ import {
   createRecharge,
   ICreateRecharge,
   ISearchHistory,
+  withdraw,
 } from "./../api/services/transaction.service";
 // product.hooks.ts
 
@@ -34,5 +35,15 @@ export const useCreateRecharge = (): UseMutationResult<
 > => {
   return useMutation<ICreateRecharge, Error, any>({
     mutationFn: (params: ICreateRecharge) => createRecharge(params),
+  });
+};
+
+export const useWithdraw = (): UseMutationResult<
+  any,
+  Error,
+  any
+> => {
+  return useMutation<any, Error, any>({
+    mutationFn: (params: any) => withdraw(params),
   });
 };

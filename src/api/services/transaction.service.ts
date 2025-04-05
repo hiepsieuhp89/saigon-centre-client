@@ -7,6 +7,7 @@ export interface ISearchHistory {
   status: "all" | "pending" | "completed" | "rejected";
   page: number;
   limit: number;
+  type: string;
 }
 
 export interface ICreateRecharge {
@@ -23,7 +24,9 @@ export interface IWithdrawRequest {
 
 export const getHistory = async (payload: ISearchHistory): Promise<any> => {
   const res = await sendGet(
-    `${ConfigTransactionEndPoint.HISTORY}?status=${payload.status}&page=${payload.page}&limit=${payload.limit}`
+    `${ConfigTransactionEndPoint.HISTORY}?status=${payload.status}&page=${
+      payload.page
+    }&limit=${payload.limit}${payload.type ? `&type=${payload.type}` : ""}`
   );
   return res?.data?.data;
 };
