@@ -81,13 +81,6 @@ export default function ViTienPage() {
     }
   }, [isFetching, setLoadingGlobal]);
 
-  // Handle dialog open/close
-  const handleOpenDepositDialog = () => {
-    setTransactionType("recharge");
-    setDepositDialogOpen(true);
-  };
-  const handleCloseDepositDialog = () => setDepositDialogOpen(false);
-
   // Handle open withdraw dialog with pre-filled values
   const handleOpenWithdrawDialog = () => {
     // Pre-fill bank information from profile

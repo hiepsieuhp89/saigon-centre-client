@@ -46,7 +46,7 @@ export default function ConfirmPrizeDialog({
     // Kiểm tra Số điểm trước khi xác nhận - đảm bảo so sánh số với số
     if (userBalance < productPrice) {
       const shortageAmount = productPrice - userBalance;
-      setErrorMessage(`Số điểm của bạn không đủ. Bạn cần nạp thêm {fNumberMoney(shortageAmount)} điểm để gửi đi sản phẩm này.`);
+      setErrorMessage(`Số điểm của bạn không đủ. Bạn cần nạp thêm ${fNumberMoney(shortageAmount)} điểm để gửi đi sản phẩm này.`);
       return;
     }
 
