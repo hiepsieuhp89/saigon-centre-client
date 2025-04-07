@@ -75,7 +75,7 @@ export default function ConfirmPrizeDialog({
   };
 
   const handleChatAndClose = () => {
-    openChat();
+    // openChat();
     onClose();
   };
 
