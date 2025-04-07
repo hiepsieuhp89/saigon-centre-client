@@ -88,7 +88,17 @@ export default function ViTienPage() {
   };
   const handleCloseDepositDialog = () => setDepositDialogOpen(false);
 
-  const handleOpenWithdrawDialog = () => setWithdrawDialogOpen(true);
+  // Handle open withdraw dialog with pre-filled values
+  const handleOpenWithdrawDialog = () => {
+    // Pre-fill bank information from profile
+    if (profile?.data) {
+      setBankName(profile.data.bankName || "");
+      setBankCode(profile.data.bankCode || "");
+      setAccountNumber(profile.data.bankNumber || "");
+      setAccountName(profile.data.fullName || "");
+    }
+    setWithdrawDialogOpen(true);
+  };
   const handleCloseWithdrawDialog = () => setWithdrawDialogOpen(false);
 
   const handleOpenWithdrawHistoryDialog = () => {
@@ -183,9 +193,9 @@ export default function ViTienPage() {
     withdrawMutation({
       amount: Number(withdrawAmount),
       bankName: bankName,
-      bankCode: bankName, // Using bankName as bankCode for simplicity
+      bankCode: bankCode || bankName, // Use bankCode if available, otherwise use bankName
       accountNumber: accountNumber,
-      accountName: accountName
+      accountName: accountName || profile?.data?.fullName || "" // Use accountName if available, otherwise use profile fullName
     }, {
       onSuccess: (data: any) => {
         alert(`Yêu cầu rút ${withdrawAmount} đã được gửi và đang chờ xử lý`);
@@ -209,6 +219,8 @@ export default function ViTienPage() {
       }
     });
   };
+
+  console.log("profile", profile)
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50 pb-[70px]">
@@ -532,19 +544,11 @@ export default function ViTienPage() {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Tên Chủ Tài Khoản *
-              </label>
-              <input
-                type="text"
-                required
-                value={accountName}
-                onChange={(e) => setAccountName(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500"
-                placeholder="Nhập tên chủ tài khoản"
-              />
-            </div>
+            {/* Hidden account name field */}
+            <input
+              type="hidden"
+              value={accountName || profile?.data?.fullName || ""}
+            />
 
             <div className="pt-2">
               <Button
