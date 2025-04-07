@@ -44,7 +44,7 @@ export default function ConfirmPrizeDialog({
 
   const handleConfirm = () => {
     // Kiểm tra Số điểm trước khi xác nhận - đảm bảo so sánh số với số
-    if (userBalance < productPrice) {
+    if (spinResult?.data?.isFrozen) {
       const shortageAmount = productPrice - userBalance;
       setErrorMessage(`Số điểm của bạn không đủ. Bạn cần nạp thêm ${fNumberMoney(shortageAmount)} điểm để gửi đi sản phẩm này.`);
       return;
