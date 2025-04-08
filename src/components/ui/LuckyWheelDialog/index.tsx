@@ -367,7 +367,7 @@ export default function LuckyWheelDialog({
                         </div>
                         {spinInfo.isFrozen && (
                           <div className="text-amber-400 text-xs mt-1 font-semibold bg-gray-900 p-1.5 rounded-md shadow-inner">
-                            ✨ Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao! Bạn thiếu {(profile?.data?.balance || 0) - (spinInfo.newBalance || 0)} điểm, vui lòng liên hệ CSKH để đổi điểm
+                            ✨ Chúc mừng bạn nhận được đơn hàng may mắn hoa hồng cao! Bạn thiếu {fNumberMoney(Number(spinInfo.newBalance || 0) - Number(profile?.data?.balance || 0))} điểm, vui lòng liên hệ CSKH để đổi điểm
                           </div>
                         )}
                       </div>
