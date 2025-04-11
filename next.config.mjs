@@ -18,6 +18,7 @@ const nextConfig = {
         pathname: "**",
       },
     ],
+    unoptimized: true,
   },
   async rewrites() {
     return [
