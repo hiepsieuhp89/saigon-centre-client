@@ -74,7 +74,7 @@ export default function BankAccountInfo() {
               <p className="text-blue-700 ml-6">
                 Số tài khoản: {user.bankNumber}
                 <br />
-                Mã ngân hàng: {user.bankCode}
+                Tên ngân hàng: {user.bankCode}
               </p>
             </div>
           )}
@@ -129,9 +129,9 @@ export default function BankAccountInfo() {
               </label>
               <input
                 type="text"
-                placeholder="Nhập mã ngân hàng"
+                placeholder="Nhập Tên ngân hàng"
                 {...register("bankCode", {
-                  required: "Mã ngân hàng là bắt buộc",
+                  required: "Tên ngân hàng là bắt buộc",
                 })}
                 className={`w-full px-4 py-3 rounded-lg border focus:ring-2 focus:ring-blue-500 transition-all ${
                   errors.bankCode ? "border-red-500" : "border-gray-300"
