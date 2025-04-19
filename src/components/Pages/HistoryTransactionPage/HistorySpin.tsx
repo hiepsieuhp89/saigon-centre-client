@@ -15,11 +15,25 @@ import { FaCheckCircle, FaHistory, FaSpinner } from "react-icons/fa";
 type TabStatus = "all" | "pending" | "success";
 
 export default function HistorySpin() {
-  const { mutate: getSpinHistory, isPending: isLoadingSpinHistory } =
-    useGetSpinHistory();
-  const { mutate: confirmSpin, isPending: isConfirming } = useConfirmSpin();
   const [currentTab, setCurrentTab] = useState<TabStatus>("all");
+  const { mutate: confirmSpin, isPending: isConfirming } = useConfirmSpin();
 
+  const [spinPagination, setSpinPagination] = useState({
+    current: 1,
+    pageSize: 10,
+  });
+
+  const { 
+    spinHistory, 
+    isLoading: isLoadingSpinHistory, 
+    refetch: refetchSpinHistory 
+  } = useGetSpinHistory({
+    page: spinPagination.current,
+    take: spinPagination.pageSize,
+    order: "DESC"
+  });
+
+  const [spinHistoryData, setSpinHistoryData] = useState<ISpinHistoryItem[]>([]);
   const [spinHistoryMeta, setSpinHistoryMeta] = useState({
     page: 1,
     take: 10,
@@ -27,40 +41,19 @@ export default function HistorySpin() {
     pageCount: 1,
   });
 
-  const [spinPagination, setSpinPagination] = useState({
-    current: 1,
-    pageSize: 10,
-  });
-
-  const [spinHistoryData, setSpinHistoryData] = useState<ISpinHistoryItem[]>(
-    []
-  );
-
   const FALLBACK_IMAGE_URL = "images/white-image.png";
 
-  // Load Lịch sử gửi đơn
-  const loadSpinHistory = () => {
-    getSpinHistory(
-      {
-        page: spinPagination.current,
-        take: spinPagination.pageSize,
-        order: "DESC",
-      },
-      {
-        onSuccess: (response) => {
-          setSpinHistoryData(response.data);
-          setSpinHistoryMeta(response.meta);
-        },
-        onError: (err) => {
-          console.error("Error loading spin history:", err);
-          setSpinHistoryData([]);
-        },
-      }
-    );
-  };
-
+  // Update state when data is loaded
   useEffect(() => {
-    loadSpinHistory();
+    if (spinHistory) {
+      setSpinHistoryData(spinHistory.data);
+      setSpinHistoryMeta(spinHistory.meta);
+    }
+  }, [spinHistory]);
+
+  // Refresh data when pagination changes
+  useEffect(() => {
+    refetchSpinHistory();
   }, [spinPagination]);
 
   // Xử lý thay đổi trang
@@ -102,7 +95,7 @@ export default function HistorySpin() {
             duration: 3000,
           });
           // Reload the spin history after confirmation
-          loadSpinHistory();
+          refetchSpinHistory();
         },
         onError: (err) => {
           console.error("Error confirming spin:", err);

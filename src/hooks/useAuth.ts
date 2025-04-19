@@ -134,6 +134,7 @@ export const useSpinProduct = () => {
       queryClient.invalidateQueries({ queryKey: ['profile'] });
       queryClient.invalidateQueries({ queryKey: ['get-transaction'] });
       queryClient.invalidateQueries({ queryKey: ['available-spin-products'] });
+      queryClient.invalidateQueries({ queryKey: ['spin-history'] });
     },
   });
 };
@@ -174,12 +175,14 @@ export const useConfirmSpin = () => {
 };
 
 // Thêm hook để lấy lịch sử quay
-export const useGetSpinHistory = () => {
-  return useMutation<
-    ISpinHistoryResponse, 
-    Error, 
-    { page: number; take: number; order?: 'ASC' | 'DESC' }
-  >({
-    mutationFn: (params) => getSpinHistory(params),
+export const useGetSpinHistory = (params?: { page: number; take: number; order?: 'ASC' | 'DESC' }) => {
+  const defaultParams = { page: 1, take: 10, order: 'DESC' as const };
+  const queryParams = params || defaultParams;
+  
+  const { data, isLoading, isFetching, refetch } = useQuery<ISpinHistoryResponse, Error>({
+    queryKey: ['spin-history', queryParams],
+    queryFn: () => getSpinHistory(queryParams),
   });
+
+  return { spinHistory: data, isLoading, isFetching, refetch };
 };

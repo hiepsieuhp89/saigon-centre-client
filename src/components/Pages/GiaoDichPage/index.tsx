@@ -10,6 +10,7 @@ import { ISpinHistoryItem } from "@/api/services/auth.service";
 import ConfirmPrizeDialog from "@/components/ui/ConfirmPrizeDialog";
 import LuckyWheelDialog from "@/components/ui/LuckyWheelDialog";
 import { FaBoxOpen, FaChessKing, FaCoins, FaHeadset, FaPlus, FaSync, FaWallet } from "react-icons/fa";
+import dayjs from "dayjs";
 
 // Add this after luckyWheelItems constant
 const spinHistory = [
@@ -60,35 +61,22 @@ export default function GiaoDichPage() {
   const [winnerIndex, setWinnerIndex] = useState<number | null>(null);
   const [spinResult, setSpinResult] = useState(null);
   const [spinHistoryData, setSpinHistoryData] = useState<ISpinHistoryItem[]>([]);
-  const { mutate: getSpinHistory, isPending: isLoadingSpinHistory } =
-    useGetSpinHistory();
+  const { 
+    spinHistory, 
+    isLoading: isLoadingSpinHistory, 
+    refetch: refetchSpinHistory 
+  } = useGetSpinHistory({
+    page: 1,
+    take: 9999,
+    order: "DESC"
+  });
 
-
-  // Load Lịch sử gửi đơn
-  const loadSpinHistory = () => {
-    getSpinHistory(
-      {
-        page: 1,
-        take: 9999,
-        order: "DESC",
-      },
-      {
-        onSuccess: (response) => {
-          setSpinHistoryData(response.data);
-        },
-        onError: (err) => {
-          console.error("Error loading spin history:", err);
-          setSpinHistoryData([]);
-        },
-      }
-    );
-  };
-
+  // Update spin history data when loaded
   useEffect(() => {
-    loadSpinHistory();
-  }, []);
-
-
+    if (spinHistory) {
+      setSpinHistoryData(spinHistory.data);
+    }
+  }, [spinHistory]);
 
   // Kiểm tra VIP level của người dùng
   const vipLevel = profile?.data?.vipLevel || 0;
@@ -272,12 +260,12 @@ export default function GiaoDichPage() {
               </button>
             </div>
 
-            {spinHistory.slice(0, 3).map((item) => (
+            {spinHistoryData.slice(0, 3).map((item: ISpinHistoryItem) => (
               <div key={item.id} className="border-b border-gray-100 py-3 last:border-0">
                 <div className="flex justify-between">
                   <div>
-                    <p className="font-medium text-gray-800">{item.productName}</p>
-                    <p className="text-sm text-gray-500">{item.date}</p>
+                    <p className="font-medium text-gray-800">{item.product?.name || "Sản phẩm không xác định"}</p>
+                    <p className="text-sm text-gray-500">{dayjs(item.createdAt).format("YYYY-MM-DD HH:mm:ss")}</p>
                   </div>
                   {/* <div className="text-right">
                     <p className="font-semibold text-green-600">{item.price}</p>
